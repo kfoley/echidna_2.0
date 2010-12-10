@@ -1,0 +1,3 @@
+module Blacklight::Solr::Document::ConditionExport
+
+end
