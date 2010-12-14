@@ -1,6 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
   Blacklight::Routes.build map
 
+  map.resources(:isbexport,
+    :only => [:index, :show, :update],
+    :collection => { :csv => :get })
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

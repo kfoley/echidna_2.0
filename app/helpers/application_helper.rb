@@ -10,4 +10,11 @@ module ApplicationHelper
         puts "#{document}"
     end
 
+    def render_csv_texts(documents)
+      val = ""
+      documents.each do |doc|
+        val += doc.export_as_csv + "\n"
+      end
+      val
+    end
 end
