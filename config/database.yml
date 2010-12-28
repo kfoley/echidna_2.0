@@ -3,8 +3,8 @@
 development:
   adapter: mysql
   database: echidna_development_kf
-  username: kfoley
-  password: kfoley
+  username: egrin
+  password: egrin
   socket: /tmp/mysql.sock
 #  pool: 5
 #  timeout: 5000
