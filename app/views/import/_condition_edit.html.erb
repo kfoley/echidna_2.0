@@ -1,0 +1,23 @@
+<div class="box" style="width: 70%">
+  <div style="margin-bottom: 10px;">
+    <%= cond.label :name, "Condition Name: ", :class => 'caption' %>
+    <%= cond.text_field :name, :size => 80 %>
+  </div>
+  <h4>Observations:
+  <%= link_to_add_fields(image_tag("plus.png", :height => 14), cond, :observations, vocab_items, units) %></h4>
+  <div>
+    <table>
+      <tbody>
+      <tr>
+        <td class="small-caption">Name:</td>
+        <td class="small-caption">Value:</td>
+        <td class="small-caption">Units:</td>
+        <td>&nbsp;</td>
+      </tr>
+      <% cond.fields_for :observations do |obs| %>
+      <%= render "observation_edit", :obs => obs, :vocab_items => @vocab_items, :units => @units %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

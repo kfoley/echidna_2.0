@@ -1,0 +1,48 @@
+<% content_for :title do %>Echidna - SBEAMS Importer<% end %>
+<% content_for :init_js do -%>
+  <script type="text/javascript">
+    function removeFields(link) {
+      $(link).prev("input[type=hidden]").val("1");
+      $(link).closest('.obsfields').hide(300);
+    }
+    function addFields(link, association, content) {
+      var newId = new Date().getTime();
+      var regexp = new RegExp("new_" + association, "g");
+      $(link).closest('.obsfields').after(content.replace(regexp, newId));
+      $(link).parent().next().find('.obsfields:last').after(content.replace(regexp, newId)).parent().children(':last').hide().fadeIn(300);
+    }
+
+    $(document).ready(function() {
+    });
+  </script>
+<% end -%>
+
+<h2 class="alt">Echidna SBEAMS Import</h2>
+<% form_for @group, :url => { :action => 'update' } do |f| %>
+  <%= f.hidden_field :id %>
+  <div>
+    <%= submit_tag "Save Experiment"  %>
+    <input type="button" value="Cancel"></input>
+  </div>
+  <div class="box" style="border: dashed black 2px; background-color: #cccccc; width: 70%">
+    <div><span class="caption">SBEAMS Project ID: </span> <%= @project_id %></div>
+    <div style="margin-bottom: 8px;"><span class="caption">SBEAMS Timestamp: </span> <%= @timestamp %></div>
+    <%= f.label :name, "Condition Group Name: ", :class => 'caption' %>
+    <%= f.text_field :name, :size => 50 %>
+    <div>&nbsp;</div>
+    <div>
+      <%= f.check_box :is_time_series %>
+      <%= f.label :is_time_series, "Is this a time series ?" %>
+    </div>
+
+  </div>
+
+  <h3 class="alt">Conditions (<%= @group.conditions.length %>): </h3>
+  <% f.fields_for :conditions do |cond| %>
+  <%= render "condition_edit", :cond => cond, :vocab_items => @vocab_items, :units => @units %>
+  <% end %>
+  <div>
+    <%= submit_tag "Save Experiment"  %>
+    <input type="button" value="Cancel"></input>
+  </div>
+<% end %>

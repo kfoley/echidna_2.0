@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%=h yield :title %></title>
+    <%= stylesheet_link_tag "blueprint/screen", :media => "screen, projection" %>
+    <%= stylesheet_link_tag "blueprint/print", :media => "print" %>
+    <%= stylesheet_link_tag "blueprint/plugins/fancy-type/screen", :media => "screen, projection" %>
+    <%= stylesheet_link_tag "echidna" %>
+    <%= javascript_include_tag "jquery-1.4.3.min" %>
+    <%= yield :init_js %>
+  </head>
+  <body>
+    <%= image_tag "echidna_logo.png", :width => "260", :style => "float: right;" %>
+    <%= yield %>
+  </body>
+</html>
