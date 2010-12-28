@@ -2,6 +2,7 @@
 <html>
   <head>
     <title><%=h yield :title %></title>
+    <%= stylesheet_link_tag "/plugin_assets/blacklight/stylesheets/application", :media => "screen" %>
     <%= stylesheet_link_tag "blueprint/screen", :media => "screen, projection" %>
     <%= stylesheet_link_tag "blueprint/print", :media => "print" %>
     <%= stylesheet_link_tag "blueprint/plugins/fancy-type/screen", :media => "screen, projection" %>
@@ -10,7 +11,8 @@
     <%= yield :init_js %>
   </head>
   <body>
-    <%= image_tag "echidna_logo.png", :width => "260", :style => "float: right;" %>
+    <h1 class="site_title" style="margin: 0px"><%= link_to application_name, root_path %><%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>" : "" %></h1>
+    <div style="height: 1em;">&nbsp;</div>
     <%= yield %>
   </body>
 </html>
