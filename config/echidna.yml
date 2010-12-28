@@ -1,0 +1,8 @@
+development:
+  arrays_dir: /Volumes/Arrays
+
+test:
+  arrays_dir: /Volumes/Arrays
+
+production:
+  arrays_dir: /Volumes/Arrays
