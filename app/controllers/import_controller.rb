@@ -8,14 +8,15 @@ class ImportController < ApplicationController
     @units          = get_units_for_select
 
     if !@project_id.nil? and !@timestamp.nil? then
-=begin
+#=begin
       importer = EchidnaImport::ExperimentImporter.new(ECHIDNA_CONFIG['arrays_dir'],
                                                        @project_id,
                                                        @timestamp,
                                                        @import_user_id)
       @group = importer.import
-=end
-      @group = ConditionGroup.find(318)
+#=end
+      puts "import done - rolled back"
+      # @group = ConditionGroup.find(318)
       @group.conditions.each do | cond |
         cond.observations.build
       end

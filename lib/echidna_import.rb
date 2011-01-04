@@ -113,7 +113,7 @@ module EchidnaImport
 
         # debugging: roll everything back
         puts "done, rolling back now..."
-        raise ActiveRecord::Rollback
+        #raise ActiveRecord::Rollback
       end
       group
     end
@@ -166,6 +166,8 @@ module EchidnaImport
         end
         c = Condition.new(:name => cond,
                           :sequence => index + 1,
+                          :sbeams_project_id    => @project_id,
+                          :sbeams_timestamp     => @timestamp,
                           :forward_slide_number => slidenums[key][:forward],
                           :reverse_slide_number => slidenums[key][:reverse])
         c.save
