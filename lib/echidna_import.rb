@@ -161,6 +161,9 @@ module EchidnaImport
       result = []
       conds.each_with_index do |cond, index|
         key = cond.gsub(/\.sig/, "")
+        if not slidenums.has_key? key then
+          raise "Inconsistent input, .sig file not found: '#{key}'"
+        end
         c = Condition.new(:name => cond,
                           :sequence => index + 1,
                           :forward_slide_number => slidenums[key][:forward],
