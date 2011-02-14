@@ -2,6 +2,7 @@
   <td><%= obs.select :name_id, vocab_items %></td>
   <td><%= obs.text_field :string_value %></td>
   <td><%= obs.select :units_id, units %></td>
+
   <td>
     <%= link_to_remove_fields(image_tag("trashcan.gif", :height => 18), obs) %>
   </td>

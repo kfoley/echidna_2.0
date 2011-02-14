@@ -1,0 +1,98 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource"
+	      driver="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://nightingale/echidna2_production4"
+              user="kfoley"
+              password="kfoley" />
+  <document>
+    <entity name="composites" pk="id" query="SELECT id, name
+				       FROM composites
+				       WHERE type='Condition'">
+				       <!-- WHERE id IN (1,2,3,1000,1200)"> -->
+				       <!-- WHERE '${dataimporter.request.clean}' != 'false'
+				       OR updated_at > '${dataimporter.last_index_time}'"> -->
+				       
+      <field column="ID" name="composites_id" />
+      <field column="name" name="name" />
+      <field column="name" name="condition_name" />
+
+      <entity name="group" query="SELECT name 
+				  FROM composites 
+				  WHERE id IN (SELECT parent_id FROM groupings WHERE child_id='${composites.id}')">
+	<field column="name" name="group_name" />
+      </entity>
+
+      <entity name="species" query="SELECT properties.value
+				    FROM composites_properties, vocabulary_entries, properties
+				    WHERE composites_properties.composite_id='${composites.id}'
+				    AND properties.id=composites_properties.property_id
+				    AND properties.`key`=vocabulary_entries.`key`
+				    AND properties.`key`='species'">
+	<field column="value" name="species_name" />
+      </entity>
+
+<!--   The following is for when this data becomes available in the DB
+       Basically, we are wanting to show the user:
+       1) which items/values are available for denoting perturbation
+       2) which items/values are available for denoting the metadata for a certain species
+       3) which items/values are observation properties 
+       4) which items/values are imposed properties (deliberately changed by experimenter)
+
+-->
+
+      <entity name="perturbation" query="SELECT vocabulary_entries.`key`, vocabulary_entries.type 
+					 FROM vocabulary_entries, composites_properties, properties
+					 WHERE composites_properties.composite_id='${composites.id}'
+					 AND properties.id=composites_properties.property_id
+					 AND properties.`key`=vocabulary_entries.`key`
+					 AND composites_properties.is_perturbation=1">
+	<field column="key" name="perturbation" />
+	<field column="type" name="perturbation_type" />
+      </entity>
+
+      <entity name="measurement" query="SELECT vocabulary_entries.`key` 
+					 FROM vocabulary_entries, composites_properties, properties
+					 WHERE composites_properties.composite_id='${composites.id}'
+					 AND properties.id=composites_properties.property_id
+					 AND properties.`key`=vocabulary_entries.`key`
+					 AND vocabulary_entries.type='measurement'">
+	<field column="key" name="measurement_type" />
+      </entity>
+
+<!--
+      <entity name="species_vocab" query="">
+	<field column="" name="metadata_type" />
+      </entity>
+
+      <entity name="obs_property" query="SELECT p.key as p_key, p.value as p_value FROM properties p, composites_properties cp
+				     WHERE cp.composite_id='${composites.id}'
+				     AND cp.is_observation=1
+				     AND p.id=cp.property_id">
+	<field column="p_key" name="property_key" />
+	<field column="p_value" name="property_value" />
+      </entity>
+
+      <entity name="pert_property" query="SELECT p.key as p_key, p.value as p_value FROM properties p, composites_properties cp
+				     WHERE cp.composite_id='${composites.id}'
+				     AND cp.is_perturbation=1
+				     AND p.id=cp.property_id">
+	<field column="p_key" name="property_key" />
+	<field column="p_value" name="property_value" />
+      </entity>
+-->
+      <entity name="property" query="SELECT p.key as p_key, p.value as p_value FROM properties p, composites_properties cp
+				     WHERE cp.composite_id='${composites.id}'
+				     AND p.id=cp.property_id">
+	<field column="p_key" name="property_key" />
+	<field column="p_value" name="property_value" />
+      </entity>
+
+
+
+
+
+    </entity>
+ </document>
+
+
+</dataConfig>

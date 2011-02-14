@@ -6,6 +6,7 @@ class ImportController < ApplicationController
     @import_user_id = 0
     @vocab_items    = get_vocabulary_for_select
     @units          = get_units_for_select
+    @names          = get_condition_names
 
     if !@project_id.nil? and !@timestamp.nil? then
       #importer = EchidnaImport::ExperimentImporter.new(ECHIDNA_CONFIG['arrays_dir'],
@@ -20,6 +21,22 @@ class ImportController < ApplicationController
     else
       # @group = nil
     end
+  end
+
+  def get_condition_names
+    @arrays_dir = ECHIDNA_CONFIG['arrays_dir']
+    exp_dir = "#{@arrays_dir}/Pipeline/output/project_id/#{@project_id}/#{@timestamp}"
+    puts "karen test "
+    puts exp_dir
+    d_matrix = EchidnaImport::DataMatrix.new("#{exp_dir}/matrix_output")
+    conds = d_matrix.conditions
+    result = []
+    conds.each_with_index do |cond, index|
+      #puts cond
+      result << [index, cond]
+    end
+    puts "end karen test"    
+    result
   end
 
   def update

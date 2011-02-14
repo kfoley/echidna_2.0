@@ -78,15 +78,12 @@ Blacklight.configure(:shared) do |config|
 #      "lc_1letter_facet",
 #      "subject_geo_facet",
 #      "subject_era_facet",
-      "user_last_name",
+      "name",
 #      "experiment_id",
 #      "sbeamsID",
-      "species_name",
-      "growth_media_name",
-      "groups",
-      "tag_name",
-      "tag_cat_name",
-      "perturbations"
+      "group_name",
+      "condition_name",
+      "property_key",
 #      "obs_name"
     ]),
     :labels => {
@@ -97,16 +94,12 @@ Blacklight.configure(:shared) do |config|
 #      "lc_1letter_facet"    => "Call Number",
 #      "subject_era_facet"   => "Era",
 #      "subject_geo_facet"   => "Region",
-      "user_last_name"            => "Creator",
+      "name"              => "Composite",
 #      "experiment_id"       => "Experiment Number",
 #      "sbeamsID"            => "SBEAMS ID",
-      "species_name"        => "Species",
-      "growth_media_name"   => "Growth Media",
-      "groups"              => "Groups",
-      "perturbations"       => "Perturbations",
-#      "obs_name"            => "Observations",
-      "tag_name"            => "Tags",
-      "tag_cat_name"        => "Tag Categories"
+      "group_name"        => "Group",
+      "condition_name"    => "Condition",
+      "property_key"      => "Property Key"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
     # * If left unset, then all facet values returned by solr will be displayed.
@@ -124,12 +117,10 @@ Blacklight.configure(:shared) do |config|
     :limits => {
       "subject_facet" => 20,
       "language_facet" => true,
-      "tag_name" => 5,
+      "property_key" => 5,
 #      "sbeamsID" => 5,
-      "tag_cat_name" => 5,
-      "perturbations" => 5,
-#      "obs_name" => 5,
-      "groups" => 5
+      "group_name" => 5,
+      "condition_name" => 5
     }
   }
 
@@ -143,34 +134,18 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:index_fields] = {
     :field_names => [
-      "user_last_name",
       "name",
-      "species_name",
-      "experiment_id",
-      "sbeamsID",
-      "growth_media_name",
-      "growth_media_descr",
-      "growth_media_url",
-      "groups",
-      "tag_name",
-      "tag_cat_name",
-      "perturbations",
-      "obs_name"
+      "group_name",
+      "condition_name",
+      "property_key",
+      "property_value"
     ],
     :labels => {
-      "user_last_name"          => "Creator:",
-      "name"                    => "Condition Name:",
-      "species_name"            => "Species Name:",
-      "experiment_id"           => "Expirment Number:",
-      "sbeamsID"                => "SBEAMS ID:",
-      "growth_media_name"       => "Growth Media:",
-      "growth_media_descr"      => "Media Description:",
-      "growth_media_url"        => "Media URL:",
-      "groups"                  => "Groups:",
-      "perturbations"           => "Perturbations:",
-      "obs_name"                => "Observations:",
-      "tag_name"                => "Tag Names:",
-      "tag_cat_name"            => "Tag Categories:"
+      "name"             => "Composite:",
+      "group_name"       => "Group Name:",
+      "condition_name"   => "Condition Name:",
+      "property_key"     => "Key:",
+      "property_value"   => "Value:"
     }
   }
 
@@ -194,21 +169,10 @@ Blacklight.configure(:shared) do |config|
 #      "lc_callnum_display",
 #      "isbn_t",
       "name",
-      "species_name",
-      "user_last_name",
-      "experiment_id",
-      "sbeamsID",
-      "growth_media_name",
-      "growth_media_descr",
-      "growth_media_url",
-      "groups",
-      "perturbations",
-      "obs_name",
-      "tag_name",
-      "tag_cat_name"
-#      "gene",
-#      "data_type_name",
-#      "data_value"
+      "group_name",
+      "condition_name",
+      "property_key",
+      "property_value"
     ],
     :labels => {
 #      "title_display"           => "Title:",
@@ -226,22 +190,11 @@ Blacklight.configure(:shared) do |config|
 #      "published_vern_display"  => "Published:",
 #      "lc_callnum_display"      => "Call number:",
 #      "isbn_t"                  => "ISBN:",
-      "user_last_name"                => "Creator:",
-      "name"                    => "Condition Name:",
-      "species_name"            => "Species Name:",
-      "experiment_id"           => "Expirment Number:",
-      "sbeamsID"                => "SBEAMS ID:",
-      "growth_media_name"       => "Growth Media:",
-      "growth_media_descr"      => "Media Description:",
-      "growth_media_url"        => "Media URL:",
-      "groups"                  => "Groups:",
-      "perturbations"           => "Perturbations:",
-      "obs_name"                => "Observations:",
-      "tag_name"                => "Tag Names:",
-      "tag_cat_name"            => "Tag Categories:"
-#      "gene"                   => "Genes:",
-#      "data_type_name"          => "Data Type:",
-#      "data_value"              => "Data Value:"
+      "name"             => "Composite:",
+      "group_name"       => "Group Name:",
+      "condition_name"   => "Condition Name:",
+      "property_key"     => "Key:",
+      "property_value"   => "Value:"
     }
   }
 
@@ -322,10 +275,6 @@ Blacklight.configure(:shared) do |config|
   # label is key, solr field is value
   config[:sort_fields] ||= []
   config[:sort_fields] << ['relevance', 'score desc, pub_date_sort desc, title_sort asc']
-  config[:sort_fields] << ['experiment id', 'experiment_id asc, name desc']
-  config[:sort_fields] << ['author', 'author_sort asc, title_sort asc']
-  config[:sort_fields] << ['title', 'title_sort asc, pub_date_sort desc']
-  config[:sort_fields] << ['sbeams id', 'sbeamsID asc, experiment_id desc']
   
   # If there are more than this many search results, no spelling ("did you 
   # mean") suggestion is offered.
