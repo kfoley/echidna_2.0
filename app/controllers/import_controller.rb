@@ -9,12 +9,15 @@ class ImportController < ApplicationController
     @names          = get_condition_names
 
     if !@project_id.nil? and !@timestamp.nil? then
-      #importer = EchidnaImport::ExperimentImporter.new(ECHIDNA_CONFIG['arrays_dir'],
-      #                                                 @project_id,
-      #                                                 @timestamp,
-      #                                                 @import_user_id)
-      # @group = importer.import
-      @group = ConditionGroup.find(318)
+#=begin
+      importer = EchidnaImport::ExperimentImporter.new(ECHIDNA_CONFIG['arrays_dir'],
+                                                       @project_id,
+                                                       @timestamp,
+                                                       @import_user_id)
+      @group = importer.import
+#=end
+      puts "import done - rolled back"
+      # @group = ConditionGroup.find(318)
       @group.conditions.each do | cond |
         cond.observations.build
       end
@@ -46,7 +49,7 @@ class ImportController < ApplicationController
   end
 
   private
-  
+
   def get_vocabulary_for_select
     result = []
     items = ControlledVocabItem.all(:order => 'name')
@@ -55,6 +58,7 @@ class ImportController < ApplicationController
     end
     result
   end
+
   def get_units_for_select
     result = []
     units = Unit.all(:conditions => 'name is not null', :order => 'name')

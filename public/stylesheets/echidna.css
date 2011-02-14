@@ -20,3 +20,10 @@ body {
     margin-bottom: 10px;
     padding: 8px;
 }
+
+/* Top Banner override */
+h1.site_title {background: transparent url('../images/logo.png') no-repeat top left; margin: 2em 0px 0px 1em; height: 35px; width: 138px;}
+.first h1 {margin: 0px; padding: 0px;}
+h1.site_title a {display:block; height: 35px; width:138px; text-indent: -9999px; overflow: hidden; text-decoration: none; border: 0px;}
+h1.site_title a:link, h1.site_title a:visited, h1.site_title a:hover, h1.site_title a:active {border: 0px;}
+

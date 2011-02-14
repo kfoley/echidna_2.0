@@ -16,6 +16,7 @@
     });
   </script>
 <% end -%>
+
 <p> TEST
   <%  @names.each_with_index do |name, index| %>
   <%= "#{index} #{name}"  %>
@@ -23,6 +24,7 @@
   <% end %>
 </p>
 <h2 class="alt">Echidna SBEAMS Import</h2>
+
 <% form_for @group, :url => { :action => 'update' } do |f| %>
 
   <%= f.hidden_field :id %>
