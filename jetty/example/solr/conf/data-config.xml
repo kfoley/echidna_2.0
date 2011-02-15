@@ -1,9 +1,9 @@
 <dataConfig>
   <dataSource type="JdbcDataSource"
 	      driver="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://nightingale/echidna2_production2"
-              user="kfoley"
-              password="kfoley" />
+              url="jdbc:mysql://druid/echidna2_production"
+              user="egrin"
+              password="egrin" />
   <document>
     <entity name="composites" pk="id" query="SELECT id, name
 				       FROM composites

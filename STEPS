@@ -1,0 +1,13 @@
+rename table users to users_echid;
+rename table tags to tags_echid;
+
+rake db:migrate
+
+edit solr/conf/data-config.xml to database configuration
+
+index the database in Solr
+
+http://localhost:8983/solr/admin/dataimport.jsp?handler=/dataimport
+
+"import with cleaning"
+
