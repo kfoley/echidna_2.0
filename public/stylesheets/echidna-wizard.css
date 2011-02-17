@@ -1,0 +1,41 @@
+.wizard-form-box {
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #888888;
+    border-radius: 5px;
+}
+
+.wizard-form-header {
+    text-align: left;
+    width: 100%;
+    background-color: #dddddd;
+}
+.wizard-form-caption {
+    font-size: 14pt;
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+.wizard-form-content {
+    margin-top: 1em;
+    margin-left: 2em;
+    margin-right: 2em;
+    font-weight: bold;
+}
+
+.wizard-question {
+    margin-top: 2em;
+    font-size: 12pt;
+    text-decoration: underline;
+}
+
+.wizard-form-row {
+    margin-top: 10pt;
+}
+
+th {
+    background-color: #dddddd;
+}
+td.cond {
+    border-bottom: 1px solid black;
+}

@@ -1,0 +1,2 @@
+class ConditionGroup < Composite
+end

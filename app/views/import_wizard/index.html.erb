@@ -1,0 +1,174 @@
+<% content_for :title do %>Echidna 2.0 - Import Wizard<% end %>
+<% content_for :init_js do -%>
+<script src="javascripts/import_wizard.js"></script>
+<% end -%> 
+
+    <h1 class="alt">Import Data</h1>
+    <!-- Wizard Step 1 of 3 -->
+    <div id="step1_3">
+      <h2 class="alt">Step 1 of 3</h2>
+      <div id="form-content_1" class="wizard-form-box">
+        <div class="wizard-form-header"><span class="wizard-form-caption">Import New Experiment</span></div>
+        <div class="wizard-form-content">
+          <div class="wizard-question">What type of data are you importing ?</div>
+          <div class="wizard-form-row">
+            <span>
+              <span>1) Species:</span> <span><%= select("import", "species", Species.all.collect {|s| [s.name, s.id] }) %></span>
+            </span>
+            <span>
+              <span>2) Data Type:</span> <span><%= select("import", "datatype", Measurement.all.collect {|m| [m.name, m.id]}) %></span>
+            </span>
+            <!-- properties with key 'slide_type' -->
+            <span>
+              <span>3) Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.id]}) %></span>
+            </span>
+          </div>
+          <div class="wizard-form-row">
+            <span>
+              <span>4) Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.id]}) %></span>
+            </span>
+            <span>
+              <span>5) Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.id]}) %></span>
+            </span>
+          </div>
+          <div class="wizard-question">Where is the data you are importing ?</div>
+          <div class="wizard-form-row">
+            <span>
+              <span>SBEAMS Project Id: </span><span><input type="text" name="sbeams_project_id"></span>
+              <span>SBEAMS Timestamp: </span><span><input type="text" name="sbeams_timestamp"></span>
+            </span>
+<!--
+            <span><span>Folder with data to import:</span> <span><input type="file" name="import_file"></span></span>
+-->
+          </div>
+          <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt"><input id="next_1_3" type="submit" value="Continue..."></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wizard Step 2 of 3 -->
+    <div id="step2_3">
+      <h2 class="alt">Step 2 of 3</h2>
+      <div id="form-content_2" class="wizard-form-box">
+        <div class="wizard-form-header"><span class="wizard-form-caption">Group the conditions for the imported runs</span></div>
+        <div class="wizard-form-content">
+          <!-- left box -->
+          <div id="condition-box" style="width: 40%; float: left;">
+            <div style="margin-bottom: 5px;">List of conditions available:</div>
+            <div id="condition-table" style="border: 1px solid black; border-radius: 5px;">
+              <div style="background-color: #dddddd; padding: 5px;"><input type="checkbox" id="checkall"> Check All</div>
+              <div style="overflow: auto; height: 240px;">
+                <table id="condition-list">
+                  <tbody>
+                    <tr><td class="cond"><input type="checkbox">KO_ura3_0.55_vs_NRC_R.sig<br>
+                        Groups: groupName1, groupName2
+                    </td></tr>
+                    <tr><td class="cond"><input type="checkbox">KO_ura3_0.75_vs_NRC_R.sig<br>
+                        Groups: groupName1, groupName2
+                    </td></tr>
+                    <tr><td class="cond"><input type="checkbox">Paraquat_Constant_4mM_060min_vs_NRC-1f.sig<br>
+                        Groups: groupName1, groupName2
+                    </td></tr>
+                    <tr><td class="cond"><input type="checkbox">Paraquat_Constant_4mM_120min_vs_NRC-1f.sig<br>
+                        Groups: groupName1, groupName2
+                    </td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- middle box -->
+          <div id="assign-box" style="width: 60px; float: left;">
+            <div style="50px; height: 60px;">&nbsp;</div>
+            <div style="text-align: center;"><a href="#" id="add-selected-conditions"><img src="images/arrow_right.png" style="width: 50px;"></a></div>
+          </div>
+
+          <!-- right box -->
+          <div id="group-box" style="width: auto; float: left;">
+            <div style="margin-bottom: 5px;">Subset of conditions:</div>
+            <div style="border: 1px solid black; overflow: auto; height: 150px;">
+              <table id="selected-conditions">
+                <tbody>
+<!--
+                  <tr><td>KO_ura3_0.55_vs_NRC_R.sig <a href="#2"><img src="images/delete_icon.gif"></a></td></tr>
+                  <tr><td>Paraquat_Constant_4mM_120min_vs_NRC-1f.sig <a href="#"><img src="images/delete_icon.gif"></a></td></tr> -->
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div>Group the selected conditions under</div>
+              <span><select id="all-condition-groups"><option>some group name</option></select></span>
+              <span style="margin-top: 10px;"><input type="submit" value="Apply Grouping"></span>
+            </div>
+
+            <div id="apply-grouping-box">
+              <div style="margin-left: 5px; width: 40%; float:left;">
+                <div style="font-weight: bold">Metadata being applied to selected conditions:</div>
+                <div style="font-weight: normal">Zn, Cu, Zinc, Copper, Dura3, NRC-1, paraquat</div>
+              </div>
+              <div id="new-group-box" style="margin-left: 5px; width: 40%; float: left; margin-bottom: 10px;">
+                Select to create a new group<br>
+                OR <input id="create-group" type="submit" value="New Group Name...">
+              </div>
+            </div>
+
+          </div>
+          <div style="clear: both;"></div>
+          <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt">
+<input id="prev_2_3" type="submit" value="Back">
+<input id="next_2_3" type="submit" value="Continue...">
+</div>
+        </div>
+      </div>
+    </div>
+    <!-- Dialogs -->
+    <div id="new-group-dialog">
+      <span>Group Name: </span><span><input type="text"></span>
+    </div>
+
+    <!-- Wizard Step 3 of 3 -->
+    <div id="step3_3">
+      <h2 class="alt">Step 3 of 3</h2>
+      <div id="form-content_3" class="wizard-form-box">
+        <div class="wizard-form-header"><span class="wizard-form-caption">Assign the metadata for the imported conditions</span></div>
+        <div class="wizard-form-content">
+
+          <table style="border: 1px solid black;">
+            <tbody>
+              <tr>
+                <th>&nbsp;</th>
+                <th>Metadata</th>
+                <th>Type</th>
+                <th>KO_ura3_0.55_vs_NRC_R.sig</th>
+                <th>KO_ura3_0.75_vs_NRC_R.sig</th>
+              </tr>
+              <tr>
+                <td>Edit</td>
+                <td>Illumination</td>
+                <td>
+                  <input type="radio" name="md_type">observation</input><br>
+                  <input type="radio" name="md_type">perturbation</input>
+                </td>
+                <td>30</td>
+                <td>30</td>
+              </tr>
+              <tr>
+                <td>Edit</td>
+                <td>Knockout</td>
+                <td>
+                  <input type="radio" name="md_type">observation</input><br>
+                  <input type="radio" name="md_type">perturbation</input>
+                </td>
+                <td>Dura</td>
+                <td>Dura</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt">
+            <input type="submit" value="Back" id="prev_3_3">
+            <input type="submit" value="Save Medadata">
+          </div>
+        </div>       
+      </div>
+    </div>
