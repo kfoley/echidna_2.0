@@ -1,8 +1,11 @@
 .wizard-form-box {
-    width: 90%;
+/*  width: 90%;
     margin: 0 auto;
     border: 1px solid #888888;
-    border-radius: 5px;
+    border-radius: 5px;*/
+    margin-left: 1em;
+    border-top: 1px solid #888888;
+    border-bottom: 1px solid #888888;
 }
 
 .wizard-form-header {
@@ -18,8 +21,8 @@
 
 .wizard-form-content {
     margin-top: 1em;
-    margin-left: 2em;
-    margin-right: 2em;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
     font-weight: bold;
 }
 
@@ -38,4 +41,12 @@ th {
 }
 td.cond {
     border-bottom: 1px solid black;
+}
+
+td {
+    white-space: nowrap;
+}
+
+input.metadata-value {
+    width: 5em;
 }

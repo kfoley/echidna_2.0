@@ -63,15 +63,6 @@
                     <tr><td class="cond"><input type="checkbox">KO_ura3_0.55_vs_NRC_R.sig<br>
                         Groups: groupName1, groupName2
                     </td></tr>
-                    <tr><td class="cond"><input type="checkbox">KO_ura3_0.75_vs_NRC_R.sig<br>
-                        Groups: groupName1, groupName2
-                    </td></tr>
-                    <tr><td class="cond"><input type="checkbox">Paraquat_Constant_4mM_060min_vs_NRC-1f.sig<br>
-                        Groups: groupName1, groupName2
-                    </td></tr>
-                    <tr><td class="cond"><input type="checkbox">Paraquat_Constant_4mM_120min_vs_NRC-1f.sig<br>
-                        Groups: groupName1, groupName2
-                    </td></tr>
                   </tbody>
                 </table>
               </div>
@@ -90,27 +81,18 @@
             <div style="border: 1px solid black; overflow: auto; height: 150px;">
               <table id="selected-conditions">
                 <tbody>
-<!--
-                  <tr><td>KO_ura3_0.55_vs_NRC_R.sig <a href="#2"><img src="images/delete_icon.gif"></a></td></tr>
-                  <tr><td>Paraquat_Constant_4mM_120min_vs_NRC-1f.sig <a href="#"><img src="images/delete_icon.gif"></a></td></tr> -->
                 </tbody>
               </table>
             </div>
             <div>
               <div>Group the selected conditions under</div>
               <span><select id="all-condition-groups"><option>some group name</option></select></span>
-              <span style="margin-top: 10px;"><input type="submit" value="Apply Grouping"></span>
+              <span style="margin-top: 10px;"><input id="apply-grouping" type="submit" value="Apply Grouping"></span>
             </div>
 
             <div id="apply-grouping-box">
-              <div style="margin-left: 5px; width: 40%; float:left;">
-                <div style="font-weight: bold">Metadata being applied to selected conditions:</div>
-                <div style="font-weight: normal">Zn, Cu, Zinc, Copper, Dura3, NRC-1, paraquat</div>
-              </div>
-              <div id="new-group-box" style="margin-left: 5px; width: 40%; float: left; margin-bottom: 10px;">
-                Select to create a new group<br>
+              Select to create a new group
                 OR <input id="create-group" type="submit" value="New Group Name...">
-              </div>
             </div>
 
           </div>
@@ -124,7 +106,7 @@
     </div>
     <!-- Dialogs -->
     <div id="new-group-dialog">
-      <span>Group Name: </span><span><input type="text"></span>
+      <span>Group Name: </span><span><input id="new-group-name" type="text"></span>
     </div>
 
     <!-- Wizard Step 3 of 3 -->
@@ -134,7 +116,7 @@
         <div class="wizard-form-header"><span class="wizard-form-caption">Assign the metadata for the imported conditions</span></div>
         <div class="wizard-form-content">
 
-          <table style="border: 1px solid black;">
+          <table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;">
             <tbody>
               <tr>
                 <th>&nbsp;</th>
@@ -144,27 +126,33 @@
                 <th>KO_ura3_0.75_vs_NRC_R.sig</th>
               </tr>
               <tr>
-                <td>Edit</td>
-                <td>Illumination</td>
                 <td>
-                  <input type="radio" name="md_type">observation</input><br>
-                  <input type="radio" name="md_type">perturbation</input>
+                  <a href="#3" title="Edit"><img src="images/edit_icon.png" alt="Edit"></a>
+                  <img src="images/save_icon_disabled.png">
                 </td>
+                <td>Illumination</td>
+                <td>observation</td>
                 <td>30</td>
                 <td>30</td>
               </tr>
               <tr>
-                <td>Edit</td>
-                <td>Knockout</td>
+                <td>
+                  <img src="images/edit_icon_disabled.png">
+                  <a href="#3" title="Save"><img src="images/save_icon.png" alt="Save"></a>
+                </td>
+                <td><select><option>Knockout</option></select></td>
                 <td>
                   <input type="radio" name="md_type">observation</input><br>
                   <input type="radio" name="md_type">perturbation</input>
                 </td>
-                <td>Dura</td>
-                <td>Dura</td>
+                <td><input type="text" value="Dura"></td>
+                <td><input type="text" value="Dura"></td>
               </tr>
             </tbody>
           </table>
+          <div class="wizard-form-row" style="text-align: left; margin-left: 1pt; margin-top: 2pt; margin-bottom: 5pt">
+            <span><input type="submit" value="+ Add row" id="add-metadata-row"></span>
+          </div>
           <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt">
             <input type="submit" value="Back" id="prev_3_3">
             <input type="submit" value="Save Medadata">
