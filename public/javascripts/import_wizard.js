@@ -131,7 +131,6 @@ wizard.addCheckedConditions = function() {
 
 wizard.applyGrouping = function() {
     var selectedGroup = $('#all-condition-groups option:selected').val();
-    console.debug('applyGroup: ' + selectedGroup);
     wizard.addGroupToSelections(selectedGroup);
 };
 
@@ -177,25 +176,38 @@ wizard.reloadGroupSelectBox = function() {
 // *** Step 3 functions
 // *********************
 wizard.addMetadataRow = function() {
-    $('#metadata-table tr:last').after(wizard.makeMetadataRowForEdit());
-    console.debug('addMetadataRow()');
+    var lastRow = $('#metadata-table tr:last');
+    var rowIndex = lastRow.parent().children().index(lastRow);
+    lastRow.after(wizard.makeMetadataRowForEdit(rowIndex + 1));
+};
+
+wizard.makeSelectBoxFromStringArray = function(array, defaultValue) {
+    var result = '<select>';
+    if (defaultValue != null)  result += '<option>' + defaultValue + '</option>'; // result += '<option>- units -</option>';
+    for (var i = 0; i < array.length; i++) {
+        result += '<option>' + array[i] + '</option>';
+    }
+    result += '</select>';
+    return result;
 };
 
 wizard.makeMetadataSelectBox = function() {
-    return '<select><option>Knockout</option></select>';
+    return wizard.makeSelectBoxFromStringArray(wizard.metadataTypes, null);
+};
+
+wizard.makeUnitsSelectBox = function() {
+    return wizard.makeSelectBoxFromStringArray(wizard.units, '- units -');
 };
 
 // generates a metadata row from the conditions we have
-wizard.makeMetadataRowForEdit = function() {
+wizard.makeMetadataRowForEdit = function(index) {
     var result = '<tr>';
-    result += '<td><img src="images/edit_icon_disabled.png">' +
-        '<a href="#3" title="Save"><img src="images/save_icon.png" alt="Save"></a></td>';
     result += '<td>' + wizard.makeMetadataSelectBox() + '</td>';
-    result += '<td><input type="radio" name="metadata_type">observation<br>';
-    result += '<input type="radio" name="metadata_type">perturbation</td>';
+    result += '<td><input type="radio" name="metadata_type_' + index + '" value="observation" checked>observation<br>';
+    result += '<input type="radio" name="metadata_type_' + index + '" value="perturbation">perturbation</td>';
     for (var cond in wizard.conditionsAndGroups) {
         result += '<td><input class="metadata-value" type="text"> ';
-        result += '<select><option>- units -</option></select></td>';
+        result += wizard.makeUnitsSelectBox() + '</td>';
     }
     result += '</tr>';
     return result;
@@ -203,14 +215,33 @@ wizard.makeMetadataRowForEdit = function() {
 
 wizard.makeMetadataTable = function() {
     var result = '<table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;"><tbody>';
-    result += '<tr><th>&nbsp;</th><th>Metadata</th><th>Type</th>';
+    result += '<tr><th>Metadata</th><th>Type</th>';
     for (cond in wizard.conditionsAndGroups) {
         result += '<th>' + cond + '</th>';
     }
     result += '</tr>';
-    result += wizard.makeMetadataRowForEdit();
+    result += wizard.makeMetadataRowForEdit(0);
     result += '</tbody></table>';
     return result;
+};
+
+wizard.loadUnits = function() {
+    $.ajax({
+        url: 'vocabulary/units',
+        dataType: 'json',
+        success: function(result) {
+            wizard.units = result;
+        }
+    });
+};
+wizard.loadMetadataTypes = function() {
+    $.ajax({
+        url: 'vocabulary/metadata_types',
+        dataType: 'json',
+        success: function(result) {
+            wizard.metadataTypes = result;
+        }
+    });
 };
 
 // ****************************
@@ -251,8 +282,8 @@ $(document).ready(function() {
 
     $('#next_1_3').click(function() {
         if (wizard.sbeamsProjectId !== '1064' || wizard.sbeamsTimestamp !== '20100804_163517') {
-            console.debug('reloading sbeams information... project: ' + wizard.sbeamsProjectId + ' timestamp: ' +
-                          wizard.sbeamsTimestamp);
+            //console.debug('reloading sbeams information... project: ' + wizard.sbeamsProjectId + ' timestamp: ' +
+            //              wizard.sbeamsTimestamp);
             $.ajax({
                 url: 'import_wizard/conditions_and_groups?project_id=1064&timestamp=20100804_163517',
                 dataType: 'json',
@@ -279,4 +310,6 @@ $(document).ready(function() {
 
     // data load
     wizard.reloadGroupSelectBox();
+    wizard.loadUnits();
+    wizard.loadMetadataTypes();
 });
