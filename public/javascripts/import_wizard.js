@@ -6,11 +6,14 @@
  * The main idea is that the wizard object holds all input information until
  * the user hits the final commit. The conversational state is serialized into
  * JSON and submitted to the backend.
+ * What get sent to the backend is a serialized version (JSON) of:
+ *
+ * - conditionsAndGroups
+ * - metadata
  */
 var wizard = {
-    // a hash table which has conditions as key and an array of group names
-    // as value
-    conditionsAndGroups: { },
+    // an array of entries { condition: <name>, groups: <groups>}
+    conditionsAndGroups: [],
 
     // an array of strings containing all condition groups
     allConditionGroups: [],
@@ -21,7 +24,7 @@ var wizard = {
     sbeamsTimestamp: '',
 
     // holds the currently selected condition names contained in the
-    // group assign step
+    // group assign step. It is cleared after groups were assigned
     selectedConditions: [],
     
     // a row in metadata holds entries of
@@ -33,6 +36,13 @@ var wizard = {
     units: []
 };
 
+wizard.findConditionAndGroups = function(conditionName) {
+    for (var i = 0; i < wizard.conditionsAndGroups.length; i++) {
+        var condGroup = wizard.conditionsAndGroups[i];
+        if (condGroup.condition == conditionName) return condGroup;
+    }
+    return null;
+};
 // array filter method, predicate is a function that takes (elem, index)
 wizard.filter = function(array, predicate) {
     var result = [];
@@ -59,7 +69,7 @@ wizard.displayStep = function(step) {
 // *********************
 // computes a string representing a list of groups associated with a condition
 wizard.makeGroupString = function(condition) {
-    var groups = wizard.conditionsAndGroups[condition];
+    var groups = wizard.findConditionAndGroups(condition).groups;
     if (groups.length == 0) return '-';
     var result = '';
     for (var i = 0; i < groups.length; i++) {
@@ -72,7 +82,8 @@ wizard.makeGroupString = function(condition) {
 // generates HTML code for the table of imported conditions
 wizard.makeConditionAndGroupsTable = function() {
     var result = '<table id="condition-list"><tbody>\n';
-    for (var condition in wizard.conditionsAndGroups) {
+    for (var i = 0; i < wizard.conditionsAndGroups.length; i++) {
+        var condition = wizard.conditionsAndGroups[i].condition;
         result += '<tr><td class="cond"><input id="' + condition + '" type="checkbox">' + condition +
             '<br>Groups: ' + wizard.makeGroupString(condition) + '</td></tr>';
     }
@@ -137,7 +148,7 @@ wizard.applyGrouping = function() {
 wizard.addGroupToSelections = function(groupName) {
     for (var i = 0; i < wizard.selectedConditions.length; i++) {
         var cond = wizard.selectedConditions[i];
-        var groups = wizard.conditionsAndGroups[cond];
+        var groups = wizard.findConditionAndGroups(cond).groups;
         groups.push(groupName);
     }
     // clear selected box
@@ -181,9 +192,9 @@ wizard.addMetadataRow = function() {
     lastRow.after(wizard.makeMetadataRowForEdit(rowIndex + 1));
 };
 
-wizard.makeSelectBoxFromStringArray = function(array, defaultValue) {
-    var result = '<select>';
-    if (defaultValue != null)  result += '<option>' + defaultValue + '</option>'; // result += '<option>- units -</option>';
+wizard.makeSelectBoxFromStringArray = function(index, basename, array, defaultValue) {
+    var result = '<select name="' + basename + index +'">';
+    if (defaultValue != null)  result += '<option value="">' + defaultValue + '</option>';
     for (var i = 0; i < array.length; i++) {
         result += '<option>' + array[i] + '</option>';
     }
@@ -191,23 +202,24 @@ wizard.makeSelectBoxFromStringArray = function(array, defaultValue) {
     return result;
 };
 
-wizard.makeMetadataSelectBox = function() {
-    return wizard.makeSelectBoxFromStringArray(wizard.metadataTypes, null);
+wizard.makeMetadataSelectBox = function(index) {
+    return wizard.makeSelectBoxFromStringArray(index, 'metadata_type_', wizard.metadataTypes, null);
 };
 
-wizard.makeUnitsSelectBox = function() {
-    return wizard.makeSelectBoxFromStringArray(wizard.units, '- units -');
+wizard.makeUnitsSelectBox = function(index) {
+    return wizard.makeSelectBoxFromStringArray(index, 'metadata_unit_', wizard.units, '- units -');
 };
 
 // generates a metadata row from the conditions we have
-wizard.makeMetadataRowForEdit = function(index) {
+wizard.makeMetadataRowForEdit = function(rowIndex) {
     var result = '<tr>';
-    result += '<td>' + wizard.makeMetadataSelectBox() + '</td>';
-    result += '<td><input type="radio" name="metadata_type_' + index + '" value="observation" checked>observation<br>';
-    result += '<input type="radio" name="metadata_type_' + index + '" value="perturbation">perturbation</td>';
-    for (var cond in wizard.conditionsAndGroups) {
-        result += '<td><input class="metadata-value" type="text"> ';
-        result += wizard.makeUnitsSelectBox() + '</td>';
+    result += '<td>' + wizard.makeMetadataSelectBox(rowIndex) + '</td>';
+    result += '<td><input type="radio" name="obspert_' + rowIndex + '" value="observation" checked>observation<br>';
+    result += '<input type="radio" name="obspert_' + rowIndex + '" value="perturbation">perturbation</td>';
+    for (var colIndex = 0; colIndex <  wizard.conditionsAndGroups.length; colIndex++) {
+        var index = rowIndex + '_' + colIndex;
+        result += '<td><input name="metadata_value_' + index + '" class="metadata-value" type="text"> ';
+        result += wizard.makeUnitsSelectBox(index) + '</td>';
     }
     result += '</tr>';
     return result;
@@ -216,8 +228,8 @@ wizard.makeMetadataRowForEdit = function(index) {
 wizard.makeMetadataTable = function() {
     var result = '<table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;"><tbody>';
     result += '<tr><th>Metadata</th><th>Type</th>';
-    for (cond in wizard.conditionsAndGroups) {
-        result += '<th>' + cond + '</th>';
+    for (var i = 0; i <  wizard.conditionsAndGroups.length; i++) {
+        result += '<th>' + wizard.conditionsAndGroups[i].condition + '</th>';
     }
     result += '</tr>';
     result += wizard.makeMetadataRowForEdit(0);
@@ -241,6 +253,48 @@ wizard.loadMetadataTypes = function() {
         success: function(result) {
             wizard.metadataTypes = result;
         }
+    });
+};
+
+wizard.submitData = function() {
+    var lastRow = $('#metadata-table tr:last');
+    var table = lastRow.parent();
+    var rows = table.children();
+    // in this table, row 0 is the header, so there are (rows.length - 1) data rows
+    var submitData = {};
+    submitData.species = $('#import_species').val();
+    submitData.dataType = $('#import_datatype').val();
+    submitData.slideType = $('#import_slidetype').val();
+    submitData.platform = $('#import_platform').val();
+    submitData.slideFormat = $('#import_slideformat').val();
+
+    submitData.sbeamsProjectId = $('#sbeams_project_id').val();
+    submitData.sbeamsTimestamp = $('#sbeams_timestamp').val();
+    submitData.conditionsAndGroups = wizard.conditionsAndGroups;
+    submitData.metadata = [];
+    
+    for (var row = 0; row < (rows.length - 1); row++) {
+        var metadata = {};
+        submitData.metadata.push(metadata);
+        metadata.metadataType = $('select[name=metadata_type_' + row + ']').val();
+        metadata.obspert = $('input[name=obspert_' + row + ']').val();
+        metadata.conditionValues = [];
+        for (var col = 0; col < wizard.conditionsAndGroups.length; col++) {
+            var value = { };
+            metadata.conditionValues.push(value);
+            value.value =  $('input[name=metadata_value_' + row + '_' + col + ']').val();
+            value.unit  =  $('select[name=metadata_unit_' + row + '_' + col + ']').val();
+        }
+    }
+    // use json2.js to turn the data into JSON
+    var jsonStr = JSON.stringify(submitData);
+    $.ajax({
+        type: 'POST',
+        url: 'import_wizard/import_data',
+        data: {import_data: jsonStr},
+        success: function() {
+            // TODO
+        },
     });
 };
 
@@ -307,6 +361,8 @@ $(document).ready(function() {
 
     addStep2EventHandlers();
     $('#add-metadata-row').click(wizard.addMetadataRow);
+
+    $('#submit-data').click(wizard.submitData)
 
     // data load
     wizard.reloadGroupSelectBox();

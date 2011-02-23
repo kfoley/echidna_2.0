@@ -34,8 +34,8 @@
           <div class="wizard-question">Where is the data you are importing ?</div>
           <div class="wizard-form-row">
             <span>
-              <span>SBEAMS Project Id: </span><span><input type="text" name="sbeams_project_id"></span>
-              <span>SBEAMS Timestamp: </span><span><input type="text" name="sbeams_timestamp"></span>
+              <span>SBEAMS Project Id: </span><span><input type="text" id="sbeams_project_id" name="sbeams_project_id"></span>
+              <span>SBEAMS Timestamp: </span><span><input type="text" id="sbeams_timestamp" name="sbeams_timestamp"></span>
             </span>
 <!--
             <span><span>Folder with data to import:</span> <span><input type="file" name="import_file"></span></span>
@@ -155,7 +155,7 @@
           </div>
           <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt">
             <input type="submit" value="Back" id="prev_3_3">
-            <input type="submit" value="Save Medadata">
+            <input id="submit-data" type="submit" value="Save Medadata">
           </div>
         </div>       
       </div>
