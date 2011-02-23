@@ -35,6 +35,11 @@ class ImportWizardController < ApplicationController
     render :json => condition_and_groups
   end
 
+  def notify_solr_to_update
+    update_url = "#{ECHIDNA_CONFIG['solr_url']}/dataimport?command=full-import&clean=false&commit=true"
+    Net::HTTP.get(URI.parse(update_url))
+  end
+  
   def import_data
     import_json = params[:import_data]
     import_data = ActiveSupport::JSON.decode(import_json)
@@ -53,7 +58,8 @@ class ImportWizardController < ApplicationController
       assign_measurement_data(condition_map, base_uri)
       assign_condition_groups(condition_map, group_map, cond2group)
       import_observations_perturbations(mdobjects, condition_map)
-      raise ActiveRecord::Rollback
+
+      notify_solr_to_update
     end
     render :json => ["Ok"]
   end

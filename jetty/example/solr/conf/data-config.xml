@@ -7,7 +7,9 @@
   <document>
     <entity name="composites" pk="id" query="SELECT id, name
 				       FROM composites
-				       WHERE type='Condition'">
+				       WHERE type='Condition'
+               AND ('${dataimporter.request.clean}' != 'false'
+				       OR updated_at > '${dataimporter.last_index_time}')">
 				       <!-- WHERE id IN (1,2,3,1000,1200)"> -->
 				       <!-- WHERE '${dataimporter.request.clean}' != 'false'
 				       OR updated_at > '${dataimporter.last_index_time}'"> -->
