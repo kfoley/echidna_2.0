@@ -8,6 +8,10 @@
     border-bottom: 1px solid #888888;
 }
 
+.errorbox {
+    background-color: #ff8888;
+}
+
 .wizard-form-header {
     text-align: left;
     width: 100%;

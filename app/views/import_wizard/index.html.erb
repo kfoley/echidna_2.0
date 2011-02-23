@@ -41,6 +41,12 @@
             <span><span>Folder with data to import:</span> <span><input type="file" name="import_file"></span></span>
 -->
           </div>
+          <div id="step1-errorbox" class="wizard-form-row errorbox" />
+            Error occurred while loading SBEAMS information.
+            <ul>
+              <li>SBEAMS project or timestamp missing</li>
+            </ul>
+          </div>
           <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt"><input id="next_1_3" type="submit" value="Continue..."></div>
         </div>
       </div>
@@ -159,4 +165,14 @@
           </div>
         </div>       
       </div>
+    </div>
+
+    <div id="import_success_report">
+      <h2>Import Success</h2>
+      <p>Your data was successfully imported. You can search for it <a href="/">here</a>.</p>
+    </div>
+
+    <div id="import_error_report">
+      <h2>Import Error</h2>
+      <p>Data could not be imported. Server might be down. Please retry <a href="import_wizard">later</a></p>
     </div>

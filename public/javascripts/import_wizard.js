@@ -63,6 +63,20 @@ wizard.displayStep = function(step) {
     else if (step == 3) $('#step3_3').show();
     $.history.load(step);
 };
+wizard.displayImportSuccess = function() {
+    $('#step1_3').hide();
+    $('#step2_3').hide();
+    $('#step3_3').hide();
+    $('#import_success_report').show();
+    $.history.load(4);
+};
+wizard.displayImportFailure = function() {
+    $('#step1_3').hide();
+    $('#step2_3').hide();
+    $('#step3_3').hide();
+    $('#import_error_report').show();
+    $.history.load(4);
+}
 
 // *****************************
 // *** Step 2 functions
@@ -292,9 +306,8 @@ wizard.submitData = function() {
         type: 'POST',
         url: 'import_wizard/import_data',
         data: {import_data: jsonStr},
-        success: function() {
-            // TODO
-        },
+        success: function() { wizard.displayImportSuccess(); },
+        error: function() { wizard.displayImportFailure(); }
     });
 };
 
@@ -324,6 +337,17 @@ function addStep2EventHandlers() {
     $('#new-group-dialog').dialog('close');
 }
 
+wizard.displayStep1ErrorBox = function(messages) {
+    var message = '<div id="step1-errorbox" class="wizard-form-row errorbox">';
+    message += 'Error while loading SBEAMS information <ul>';
+    for (var i = 0; i < messages.length; i++) {
+        message += '<li>' + messages[i] + '</li>';
+    }
+    message += '</ul></div>';
+    $(message).replaceAll('#step1-errorbox');
+    $('#step1-errorbox').show();
+};
+
 // Application entry point
 $(document).ready(function() {
     $.history.init(function(hash) {
@@ -333,24 +357,38 @@ $(document).ready(function() {
             wizard.displayStep(hash);
         }
     }, { unescape: ",/" });
+    $('#step1-errorbox').hide();
+    $('#import_success_report').hide();
+    $('#import_error_report').hide();
 
     $('#next_1_3').click(function() {
-        if (wizard.sbeamsProjectId !== '1064' || wizard.sbeamsTimestamp !== '20100804_163517') {
-            //console.debug('reloading sbeams information... project: ' + wizard.sbeamsProjectId + ' timestamp: ' +
-            //              wizard.sbeamsTimestamp);
+        var sbeamsProjectId = $('#sbeams_project_id').val();
+        var sbeamsTimestamp = $('#sbeams_timestamp').val();
+        
+        if (sbeamsProjectId == '' || sbeamsTimestamp == '') {
+            wizard.displayStep1ErrorBox(['SBEAMS project or timestamp missing']);
+        } else if (wizard.sbeamsProjectId != sbeamsProjectId ||
+                   wizard.sbeamsTimestamp != sbeamsTimestamp) {
+            $('#step1-errorbox').hide();
             $.ajax({
-                url: 'import_wizard/conditions_and_groups?project_id=1064&timestamp=20100804_163517',
+                url: 'import_wizard/conditions_and_groups?project_id=' + sbeamsProjectId +
+                    '&timestamp=' + sbeamsTimestamp,
                 dataType: 'json',
                 success: function(result) {
                     wizard.conditionsAndGroups = result;
-                    wizard.sbeamsProjectId = '1064';
-                    wizard.sbeamsTimestamp = '20100804_163517';
+                    wizard.sbeamsProjectId = sbeamsProjectId;
+                    wizard.sbeamsTimestamp = sbeamsTimestamp;
                     $(wizard.makeConditionAndGroupsTable()).replaceAll('#condition-list');
                     $(wizard.makeMetadataTable()).replaceAll('#metadata-table');
+                    wizard.displayStep(2);
+                },
+                error: function() {
+                    wizard.displayStep1ErrorBox(['Server down or faulty SBEAMS information']);
                 }
             });
+        } else {
+            wizard.displayStep(2);
         }
-        wizard.displayStep(2);
     });
 
     $('#next_2_3').click(function() {
