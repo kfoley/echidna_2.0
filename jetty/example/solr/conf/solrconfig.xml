@@ -673,6 +673,8 @@
        <str name="facet.field">condition_name</str>
        <str name="facet.field">measurement_type</str>
        <str name="facet.field">species_name</str>
+       <str name="facet.field">pert_hier</str>
+       <str name="facet.pivot">perturbation,perturbation_type</str>
 
        <!-- Highlighting defaults -->
        <str name="hl">on</str>
