@@ -1,0 +1,60 @@
+.wizard-form-box {
+/*  width: 90%;
+    margin: 0 auto;
+    border: 1px solid #888888;
+    border-radius: 5px;*/
+    margin-left: 1em;
+    border-top: 1px solid #888888;
+    border-bottom: 1px solid #888888;
+}
+
+.errorbox {
+    background-color: #ff8888;
+}
+
+.wizard-form-header {
+    text-align: left;
+    width: 100%;
+    background-color: #dddddd;
+}
+.wizard-form-caption {
+    font-size: 14pt;
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+.wizard-form-content {
+    margin-top: 1em;
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    font-weight: bold;
+}
+
+.wizard-question {
+    margin-top: 2em;
+    font-size: 12pt;
+    text-decoration: underline;
+}
+
+.wizard-form-row {
+    margin-top: 10pt;
+}
+
+th {
+    background-color: #dddddd;
+}
+td.cond {
+    border-bottom: 1px solid black;
+}
+
+td {
+    white-space: nowrap;
+}
+
+input.metadata-value {
+    width: 5em;
+}
+
+.disabled {
+    color: #cccccc;
+}

@@ -523,40 +523,29 @@
       -->                                                                                                                                                                                       
       <str name="qf">                                                                                                                                                                           
         text^0.5                                                                                                                                                                                
-        experiment_id^1.0                                                                                                                                                                       
-        sbeamsID^1.1                                                                                                                                                                            
-        name^10.0                                                                                                                                                                               
-        species_name^5.0                                                                                                                                                                        
-        species_alt_name^4.0                                                                                                                                                                    
-        growth_media_name^3.0                                                                                                                                                                   
-        growth_media_descr^2.0                                                                                                                                                                  
-        growth_media_url^1.5                                                                                                                                                                    
-        groups^4.5                                                                                                                                                                              
-        tag_name^4.1                                                                                                                                                                            
-        tag_cat_name^4.2                                                                                                                                                                        
-        user_first_name^4.3                                                                                                                                                                     
-        user_last_name^4.4                                                                                                                                                                      
-        perturbations^9.0                                                                                                                                                                       
-        obs_name^9.1                                                                                                                                                                            
+        name^1.0
+        property_key^1.1
+	property_value^1.2
+	perturbation^1.4
+	perturbation_type^1.5
+        group_name^10.0                                                                                                                                                                               
+        condition_name^5.0
+	measurement_type^5.2
+	species_name^5.4
       </str>                                                                                                                                                                                    
       <str name="pf">  
 
         text^10                                                                                                                                                                                 
-        experiment_id^1.1                                                                                                                                                                       
-        sbeamsID^1.2                                                                                                                                                                            
-        name^10.5                                                                                                                                                                               
-        species_name^5.1                                                                                                                                                                        
-        species_alt_name^4.1                                                                                                                                                                    
-        growth_media_name^3.1                                                                                                                                                                   
-        growth_media_descr^2.1                                                                                                                                                                  
-        growth_media_url^1.6                                                                                                                                                                    
-        groups^4.6                                                                                                                                                                              
-        tag_name^4.7                                                                                                                                                                            
-        tag_cat_name^4.8                                                                                                                                                                        
-        user_first_name^4.9                                                                                                                                                                     
-        user_last_name^5.2                                                                                                                                                                      
-        perturbations^9.5                                                                                                                                                                       
-        obs_name^9.6                                                                                                                                                                            
+        name^1.1
+        property_key^1.2                                                                                                                                                                            
+	property_value^1.3
+	perturbation^1.6
+	perturbation_type^1.7
+        group_name^10.5                                                                                                                                                                               
+        condition_name^5.1                                                                                                                                                                        
+	measurement_type^5.3
+	species_name^5.5
+
       </str>  
       <int name="ps">3</int>                                                                                                                                                                    
       <float name="tie">0.01</float>                                                                                                                                                            
@@ -564,28 +553,22 @@
       <!-- NOT using marc_display because it is large and will slow things down for search results -->                                                                                          
       <str name="fl">*,score</str>  
 
-      <str name="facet">true</str>                                                                                                                                                              
-      <str name="facet.mincount">1</str>                                                                                                                                                        
+      <str name="facet">true</str>
+      <str name="facet.mincount">1</str>
       <str name="facet.limit">10</str>
-      <str name="facet.field">groups</str>                                                                                                                                                      
-      <str name="facet.field">tag_name</str>                                                                                                                                                    
-      <str name="facet.field">tag_cat_name</str>                                                                                                                                                
-      <str name="facet.field">user_first_name</str>                                                                                                                                             
-      <str name="facet.field">user_last_name</str>                                                                                                                                              
-      <str name="facet.field">name</str>                                                                                                                                                        
-      <str name="facet.field">sbeamsID</str>                                                                                                                                                    
-      <str name="facet.field">species_name</str>                                                                                                                                                
-      <str name="facet.field">species_alt_name</str>                                                                                                                                            
-      <str name="facet.field">growth_media_name</str>                                                                                                                                           
-      <str name="facet.field">growth_media_descr</str>                                                                                                                                          
-      <str name="facet.field">growth_media_url</str>                                                                                                                                            
-      <str name="facet.field">perturbations</str>                                                                                                                                               
-      <str name="facet.field">obs_name</str>                                                                                                                                                    
-      <str name="facet.field">gene</str>                                                                                                                                                        
+      <str name="facet.field">name</str>
+      <str name="facet.field">perturbation</str> 
+      <str name="facet.field">perturbation_type</str> 
+      <str name="facet.field">property_key</str>
+      <str name="facet.field">property_value</str>
+      <str name="facet.field">group_name</str>
+      <str name="facet.field">condition_name</str>
+      <str name="facet.field">measurement_type</str>
+      <str name="facet.field">species_name</str>
+
       <!--<str name="facet.field">data_type_name</str>-->                                                                                                                                       
 <!--      <str name="facet.field">ratio</str> -->
 <!--      <str name="facet.field">lambda</str> -->
-      <str name="facet.field">data_value</str>                                                                                                                                                  
                                                                                                                                                                                                 
       <str name="spellcheck">true</str>                                                                                                                                                         
       <str name="spellcheck.dictionary">default</str>                                                                                                                                           
@@ -681,24 +664,21 @@
        <str name="facet.date.other">after</str>
 
 <!-- kfoley -->                                                                                                                           
-          <str name="facet.field">groups</str>                                                                                            
-          <str name="facet.field">tag_name</str>                                                                                        
-          <str name="facet.field">tag_cat_name</str>                                                                                     
-          <str name="facet.field">user_first_name</str>                                                                                   
-          <str name="facet.field">user_last_name</str>                                                                                   
-          <str name="facet.field">name</str>                                                                                             
-          <str name="facet.field">sbeamsID</str>                                                                                        
-          <str name="facet.field">species_name</str>                                                                                     
-          <str name="facet.field">species_alt_name</str>                                                                                
-          <str name="facet.field">growth_media_name</str>                                                                               
-          <str name="facet.field">growth_media_descr</str>                                                                               
-          <str name="facet.field">growth_media_url</str>                                                                                
-          <str name="facet.field">perturbations</str>                                                                                   
-          <str name="facet.field">obs_name</str>                                                                                        
-          <str name="facet.field">gene</str>                                                                                             
-          <str name="facet.field">data_type_name</str>                                                                                  
-          <str name="facet.field">data_value</str> 
-
+       <str name="facet.field">name</str>
+       <str name="facet.field">perturbation</str>
+       <str name="facet.field">perturbation_type</str>
+       <str name="facet.field">property_key</str>
+       <str name="facet.field">property_value</str>
+       <str name="facet.field">group_name</str>
+       <str name="facet.field">condition_name</str>
+       <str name="facet.field">measurement_type</str>
+       <str name="facet.field">species_name</str>
+<<<<<<< HEAD
+       <str name="facet.field">pert_hier</str>
+=======
+       <!-- <str name="facet.field">pert_hier</str> -->
+>>>>>>> 3c7c136ee03359f259172fb36798f767f3f9c4c9
+       <str name="facet.pivot">perturbation,perturbation_type</str>
 
        <!-- Highlighting defaults -->
        <str name="hl">on</str>

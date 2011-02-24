@@ -440,7 +440,8 @@
     <field name="property_key"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="property_value" type="string" indexed="true" stored="true" required="false" multiValued="true" />                        
     <field name="measurement_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/>
+    <!-- <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/> -->
+
 
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
    <field name="sku" type="textTight" indexed="true" stored="true" omitNorms="true"/>
@@ -570,8 +571,8 @@
    <copyField source="manu" dest="manu_exact"/>
 
    <!-- Karen's copyField-->
-   <copyField source="perturbation" dest="pert_hier"/>
-   <copyField source="perturbation_type" dest="pert_hier"/>
+   <!-- <copyField source="perturbation" dest="pert_hier"/> -->
+   <!-- <copyField source="perturbation_type" dest="pert_hier"/> -->
 	
 <!-- kfoley -->                                                                                                                              
 <!--  <copyField source="*_t" dest="spell"/>                                                                                                $

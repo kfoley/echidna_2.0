@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%=h yield :title %></title>
+    <%= stylesheet_link_tag "blueprint/screen", :media => "screen, projection" %>
+    <%= stylesheet_link_tag "blueprint/print", :media => "print" %>
+    <%= stylesheet_link_tag "blueprint/plugins/fancy-type/screen", :media => "screen, projection" %>
+    <%= stylesheet_link_tag "echidna" %>
+    <%= stylesheet_link_tag "echidna-wizard" %>
+    <%= stylesheet_link_tag "smoothness/jquery-ui-1.8.9.custom" %>
+    <%= javascript_include_tag "json2.min" %>
+    <%= javascript_include_tag "jquery-1.5.min" %>
+    <%= javascript_include_tag "jquery-ui-1.8.9.custom.min" %>
+    <%= javascript_include_tag "jquery.history" %>
+    <%= yield :init_js %>
+  </head>
+  <body>
+    <h1 class="site_title" style="margin: 0px"><%= link_to application_name, root_path %><%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>" : "" %></h1>
+    <div style="height: 1em;">&nbsp;</div>
+    <%= yield %>
+  </body>
+</html>
