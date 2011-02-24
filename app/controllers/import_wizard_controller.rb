@@ -49,7 +49,7 @@ class ImportWizardController < ApplicationController
     group_names = unique_group_names(condition_names, cond2group)
 
     mdobjects = make_metadata_objects(import_data['metadata'], condition_names)
-    base_uri = "/sbeams/#{import_data['sbeamsProjectId']}/#{import_data['sbeamsTimestamp']}}"
+    base_uri = "/sbeams/#{import_data['sbeamsProjectId']}/#{import_data['sbeamsTimestamp']}"
     group_map = read_group_map_from_db(group_names)
 
     Condition.transaction do

@@ -54,3 +54,7 @@ td {
 input.metadata-value {
     width: 5em;
 }
+
+.disabled {
+    color: #cccccc;
+}

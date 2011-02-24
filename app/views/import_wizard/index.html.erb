@@ -33,13 +33,20 @@
           </div>
           <div class="wizard-question">Where is the data you are importing ?</div>
           <div class="wizard-form-row">
+            <div>
             <span>
+              <span><input type="radio" name="input_type" value="sbeams" checked></span>
               <span>SBEAMS Project Id: </span><span><input type="text" id="sbeams_project_id" name="sbeams_project_id"></span>
               <span>SBEAMS Timestamp: </span><span><input type="text" id="sbeams_timestamp" name="sbeams_timestamp"></span>
             </span>
-<!--
-            <span><span>Folder with data to import:</span> <span><input type="file" name="import_file"></span></span>
--->
+            </div>
+            <div>
+            <span>
+              <span><input type="radio" name="input_type" value="tiling" disabled="disabled"></span>
+              <span class="disabled">Tiling Array (tmp. location): </span>
+              <span><input type="text" style="width: 200px" disabled="disabled"></span>
+            </span>
+            </div>
           </div>
           <div id="step1-errorbox" class="wizard-form-row errorbox" />
             Error occurred while loading SBEAMS information.
