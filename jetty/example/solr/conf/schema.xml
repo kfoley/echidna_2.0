@@ -442,6 +442,7 @@
     <field name="measurement_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <!-- <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/> -->
 
+
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
    <field name="sku" type="textTight" indexed="true" stored="true" omitNorms="true"/>
 <!--   <field name="name" type="textgen" indexed="true" stored="true"/> -->

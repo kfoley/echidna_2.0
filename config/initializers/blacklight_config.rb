@@ -78,27 +78,29 @@ Blacklight.configure(:shared) do |config|
 #      "lc_1letter_facet",
 #      "subject_geo_facet",
 #      "subject_era_facet",
-      "name",
+      "measurement_type",
 #      "experiment_id",
 #      "sbeamsID",
+      "species_name",
+      "perturbation_type",
       "group_name",
-      "condition_name",
-      "property_key",
+      "property_key"
 #      "obs_name"
     ]),
     :labels => {
-      "format"              => "Format",
+#      "format"              => "Format",
 #      "pub_date"            => "Publication Year",
 #      "subject_topic_facet" => "Topic",
 #      "language_facet"      => "Language",
 #      "lc_1letter_facet"    => "Call Number",
 #      "subject_era_facet"   => "Era",
 #      "subject_geo_facet"   => "Region",
-      "name"              => "Composite",
+      "measurement_type"     => "Data Type",
 #      "experiment_id"       => "Experiment Number",
 #      "sbeamsID"            => "SBEAMS ID",
+      "species_name"      => "Species",
+      "perturbation_type" => "Perturbation Type",  
       "group_name"        => "Group",
-      "condition_name"    => "Condition",
       "property_key"      => "Property Key"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
@@ -118,9 +120,7 @@ Blacklight.configure(:shared) do |config|
       "subject_facet" => 20,
       "language_facet" => true,
       "property_key" => 5,
-#      "sbeamsID" => 5,
-      "group_name" => 5,
-      "condition_name" => 5
+      "group_name" => 5
     }
   }
 
@@ -135,17 +135,17 @@ Blacklight.configure(:shared) do |config|
   config[:index_fields] = {
     :field_names => [
       "name",
+      "measurement_type",
       "group_name",
-      "condition_name",
       "property_key",
       "property_value"
     ],
     :labels => {
-      "name"             => "Composite:",
+      "name"             => "Condition Name:",
+      "measurement_type" => "Data Type:",
       "group_name"       => "Group Name:",
-      "condition_name"   => "Condition Name:",
-      "property_key"     => "Key:",
-      "property_value"   => "Value:"
+      "property_key"     => "Property Key:",
+      "property_value"   => "Property Value:"
     }
   }
 
@@ -153,48 +153,18 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:show_fields] = {
     :field_names => [
-#      "title_display",
-#      "title_vern_display",
-#      "subtitle_display",
-#      "subtitle_vern_display",
-#      "author_display",
-#      "author_vern_display",
-#      "format",
-#      "url_fulltext_display",
-#      "url_suppl_display",
-#      "material_type_display",
-#      "language_facet",
-#      "published_display",
-#      "published_vern_display",
-#      "lc_callnum_display",
-#      "isbn_t",
       "name",
+      "measurement_type",
       "group_name",
-      "condition_name",
       "property_key",
       "property_value"
     ],
     :labels => {
-#      "title_display"           => "Title:",
-#      "title_vern_display"      => "Title:",
-#      "subtitle_display"        => "Subtitle:",
-#      "subtitle_vern_display"   => "Subtitle:",
-#      "author_display"          => "Author:",
-#      "author_vern_display"     => "Author:",
-#      "format"                  => "Format:",
-#      "url_fulltext_display"    => "URL:",
-#      "url_suppl_display"       => "More Information:",
-#      "material_type_display"   => "Physical description:",
-#      "language_facet"          => "Language:",
-#      "published_display"       => "Published:",
-#      "published_vern_display"  => "Published:",
-#      "lc_callnum_display"      => "Call number:",
-#      "isbn_t"                  => "ISBN:",
-      "name"             => "Composite:",
+      "name"             => "Condition Name:",
+      "measurement_type" => "Data Type:",
       "group_name"       => "Group Name:",
-      "condition_name"   => "Condition Name:",
-      "property_key"     => "Key:",
-      "property_value"   => "Value:"
+      "property_key"     => "Property Key:",
+      "property_value"   => "Property Value:"
     }
   }
 
