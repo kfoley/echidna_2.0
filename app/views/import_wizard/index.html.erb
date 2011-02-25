@@ -13,22 +13,22 @@
           <div class="wizard-question">What type of data are you importing ?</div>
           <div class="wizard-form-row">
             <span>
-              <span>1) Species:</span> <span><%= select("import", "species", Species.all.collect {|s| [s.name, s.id] }) %></span>
+              <span>1) Species:</span> <span><%= select("import", "species", Species.all.collect {|s| [s.name, s.name] }) %></span>
             </span>
             <span>
-              <span>2) Data Type:</span> <span><%= select("import", "datatype", Measurement.all.collect {|m| [m.name, m.id]}) %></span>
+              <span>2) Data Type:</span> <span><%= select("import", "datatype", Measurement.all.collect {|m| [m.name, m.name]}) %></span>
             </span>
             <!-- properties with key 'slide_type' -->
             <span>
-              <span>3) Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.id]}) %></span>
+              <span>3) Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.value]}) %></span>
             </span>
           </div>
           <div class="wizard-form-row">
             <span>
-              <span>4) Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.id]}) %></span>
+              <span>4) Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.value]}) %></span>
             </span>
             <span>
-              <span>5) Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.id]}) %></span>
+              <span>5) Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.value]}) %></span>
             </span>
           </div>
           <div class="wizard-question">Where is the data you are importing ?</div>

@@ -1,6 +1,6 @@
 development:
   arrays_dir: /Volumes/Arrays
-  solr_url: http://localhost:8983/solr
+  solr_url: http://localhost:8080/solr
 
 test:
   arrays_dir: /Volumes/Arrays
