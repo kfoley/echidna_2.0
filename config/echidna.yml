@@ -7,5 +7,5 @@ test:
   solr_url: http://localhost:8983/solr
 
 production:
-  arrays_dir: /Volumes/Arrays
-  solr_url: http://localhost:8983/solr
+  arrays_dir: /net/Arrays
+  solr_url: http://bragi.systemsbiology.net:8081/solr
