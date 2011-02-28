@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110218230927) do
+ActiveRecord::Schema.define(:version => 20110228174436) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(:version => 20110218230927) do
   end
 
   create_table "composites", :force => true do |t|
-    t.string   "name"
+    t.text     "name"
     t.integer  "owner_id"
     t.integer  "importer_id"
     t.datetime "created_at"
@@ -75,12 +75,11 @@ ActiveRecord::Schema.define(:version => 20110218230927) do
 
   create_table "measurement_datas", :force => true do |t|
     t.integer  "condition_id"
-    t.string   "uri"
+    t.text     "uri"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "measurement_datas", ["condition_id", "uri"], :name => "uc_meas_data", :unique => true
   add_index "measurement_datas", ["uri"], :name => "uc_meas_data_uri", :unique => true
 
   create_table "measurement_vocabs", :force => true do |t|
