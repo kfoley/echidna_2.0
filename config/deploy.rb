@@ -36,7 +36,7 @@ end
 #  end
 #end
 
-after :deploy, "passenger:restart"
+# after :deploy, "passenger:restart"
 
 # namespace :deploy do
 #   task :start do ; end
@@ -45,3 +45,6 @@ after :deploy, "passenger:restart"
 #     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
 #   end
 # end
+
+## CUSTOM RECIPE 
+

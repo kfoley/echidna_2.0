@@ -4,14 +4,3 @@
 <p>to your top level rails app:<br/>
 &nbsp;&nbsp;&nbsp;app/views/catalog/_home_text.html.erb</p>
 Note that you will need to create the 'catalog' directory under views.
-
-=begin
- <% tag_cloud @tags, %w(tagCloud1 tagCloud2 tagCloud3 tagCloud4) do |tag, css_class| %>                                                                                                            
-    <%= link_to h(tag.name), "#{collection_path}?tag=#{h(tag.name)}", :class => css_class %>                                                                                          
- <% end %>    
-
-       <% if params[:tag] %>                                                                                                                                                                         
-          Showing "<%= h params[:tag] %>" tagged items.                                                                                                                                               
-          Show <%= link_to 'all', bookmarks_path %>.                                                                                                                                                  
-        <% end %>    
-=end
