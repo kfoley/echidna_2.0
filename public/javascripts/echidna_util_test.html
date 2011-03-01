@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Echidna Utils Test Suite</title>
+    <link rel="stylesheet" type="text/css" href="qunit.css">
+	  <style type="text/css"> 
+	    .column { width: 50%; float: left; padding-bottom: 100px; }
+	    .portlet { margin: 0 1em 1em 0; }
+	    .portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
+	    .portlet-header .ui-icon { float: right; }
+	    .portlet-content { padding: 0.3em; }
+	    .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+	    .ui-sortable-placeholder * { visibility: hidden; }
+	  </style>
+    <script src="jquery-1.5.min.js"></script>
+    <script src="qunit.js"></script>
+    <script src="echidna_util.js"></script>
+    <script type="text/javascript">
+$(document).ready(function() {
+  test("make a display string that is not shortened", function() {
+    equal(echidna_util.makeDisplayString('displayme', 20), 'displayme');
+    equal(echidna_util.makeDisplayString('displayme', 9), 'displayme');
+  });
+  test("make a display string that is shortened", function() {
+    equal(echidna_util.makeDisplayString('displayme', 8), 'displ...');
+  });
+});
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Echidna Utils JS Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">test markup, will be hidden</div>
+  </body>
+</html>
