@@ -33,7 +33,17 @@ var wizard = {
 
     // loaded at page load time, we generate select boxes out of them
     metadataTypes: [],
-    units: []
+    units: [],
+
+    // contains all the project ids from sbeams pipeline directory
+    projectIds: [],
+
+    // contains all the timestamp folders from sbeams pipeline/project_id directory
+    timestamps: [],
+
+    // holds the selected project id from dropdown of project ids
+    selectedProjectId: ''
+
 };
 
 wizard.findConditionAndGroups = function(conditionName) {
@@ -270,6 +280,49 @@ wizard.loadMetadataTypes = function() {
     });
 };
 
+wizard.createProjectIdSelectBox = function() {
+    var result = '<select id="sbeams_project_id">'; 
+    for (var i = 0; i < wizard.projectIds.length; i++) {
+        var project = wizard.projectIds[i];
+        result += '<option value="' + project + '">' + project + '</option>';
+    }
+    result += '</select>';
+    $(result).replaceAll('#sbeams_project_id'); 
+
+    $('#sbeams_project_id').change(function() {
+        console.debug('changed to: ' + $(this).val());
+    	$.ajax({
+		url: 'import_wizard/get_sbeams_timestamp_dirs?project_id=' + $(this).val(),
+        	dataType: 'json',
+        	success: function(result) {
+            		 wizard.timestamps = result;
+	    		 wizard.createTimestampSelectBox();
+        	}
+    	});	
+    });
+};
+
+wizard.createTimestampSelectBox = function() {
+    var result = '<select id="sbeams_timestamp">'; 
+    for (var i = 0; i < wizard.timestamps.length; i++) {
+        var ts_folder = wizard.timestamps[i];
+        result += '<option value="' + ts_folder + '">' + ts_folder + '</option>';
+    }
+    result += '</select>';
+    $(result).replaceAll('#sbeams_timestamp'); 
+};
+
+wizard.reloadProjectIdsSelectBox = function() {
+    $.ajax({
+	url: 'import_wizard/get_sbeams_project_dirs',
+        dataType: 'json',
+        success: function(result) {
+            wizard.projectIds = result;
+	    wizard.createProjectIdSelectBox();
+        }
+    });
+};
+
 wizard.submitData = function() {
     var lastRow = $('#metadata-table tr:last');
     var table = lastRow.parent();
@@ -314,7 +367,6 @@ wizard.submitData = function() {
 // ****************************
 // **** Application wiring
 // ************************
-
 function addStep2EventHandlers() {
     $('#checkall').click(function() {
         $('td :checkbox').attr('checked', $('#checkall').attr('checked'));
@@ -348,6 +400,7 @@ wizard.displayStep1ErrorBox = function(messages) {
     $('#step1-errorbox').show();
 };
 
+
 // Application entry point
 $(document).ready(function() {
     $.history.init(function(hash) {
@@ -360,6 +413,9 @@ $(document).ready(function() {
     $('#step1-errorbox').hide();
     $('#import_success_report').hide();
     $('#import_error_report').hide();
+
+    wizard.createProjectIdSelectBox();
+
 
     $('#next_1_3').click(function() {
         var sbeamsProjectId = $('#sbeams_project_id').val();
@@ -400,10 +456,14 @@ $(document).ready(function() {
     addStep2EventHandlers();
     $('#add-metadata-row').click(wizard.addMetadataRow);
 
-    $('#submit-data').click(wizard.submitData)
+    $('#submit-data').click(wizard.submitData);
+
+
 
     // data load
+    wizard.reloadProjectIdsSelectBox();
     wizard.reloadGroupSelectBox();
     wizard.loadUnits();
     wizard.loadMetadataTypes();
+
 });

@@ -1,4 +1,5 @@
 require 'echidna_sbeams_import'
+require 'pathname'
 
 class Metadata
   attr_accessor :condition, :metadata_type, :obspert, :value, :unit
@@ -17,6 +18,36 @@ end
 
 class ImportWizardController < ApplicationController
   def index
+  end
+
+  # get the list of directories in the sbeams project_id directory
+  def get_sbeams_project_dirs()
+    directory_name = "#{ECHIDNA_CONFIG['arrays_dir']}/Pipeline/output/project_id"
+    dir_list = Pathname.new(directory_name).children.select { |c| c.directory? }.collect { |p| p.to_s }
+
+    all_names = []
+    dir_list.each do |folder_name|
+      name = {}
+      name = File.basename(folder_name)
+      all_names << name
+    end
+    render :json => all_names.sort 
+  end
+
+  # get the list of directories in the sbeams timestamp directory from selected project_id
+  def get_sbeams_timestamp_dirs 
+    @project_id = params[:project_id]
+    directory_name = "#{ECHIDNA_CONFIG['arrays_dir']}/Pipeline/output/project_id/#{@project_id}"
+    dir_list = Pathname.new(directory_name).children.select { |c| c.directory? }.collect { |p| p.to_s }
+    
+    all_names = []
+    dir_list.each do |folder_name|
+      name = {}
+      name = File.basename(folder_name)
+      all_names << name
+    end
+    render :json => all_names.sort     
+
   end
 
   # render conditions and groups as an HTML table with id 'condition-list'
@@ -193,4 +224,5 @@ private
     }
     mdobjects
   end
+
 end
