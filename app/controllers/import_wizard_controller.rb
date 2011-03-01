@@ -29,9 +29,16 @@ class ImportWizardController < ApplicationController
     dir_list.each do |folder_name|
       name = {}
       name = File.basename(folder_name)
-      all_names << name
+
+      if name.starts_with? '.'
+      else
+        all_names << name
+      end
+      
     end
+
     render :json => all_names.sort 
+
   end
 
   # get the list of directories in the sbeams timestamp directory from selected project_id
