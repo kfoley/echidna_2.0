@@ -1,3 +1,4 @@
+config/database.yml
 jetty/solr
 jetty/example/work
 jetty/example/solr/data

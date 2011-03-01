@@ -47,4 +47,17 @@ end
 # end
 
 ## CUSTOM RECIPE 
+# Don't commit to github database.yml; commit database.example.yml
+# Store database.yml somewhere
+# run script here to copy over the correct database.yml
+after "deploy:update_code", :post_update_code_hook
 
+desc "upload config files that aren't kept in the source code repository"
+task :post_update_code_hook do
+  local_rails_root = `pwd`
+  run "echo 'uploading config files'"
+
+  # upload "config/boot.rb", "#{release_path}/config/", :via => :scp
+  upload "config/database.yml", "#{release_path}/config/", :via => :scp
+  run "touch #{current_release}/tmp/restart.txt"
+end
