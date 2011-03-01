@@ -2,9 +2,9 @@
 #   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
   adapter: mysql
-  database: echidna2_production2
-  username: kfoley
-  password: kfoley
+  database: echidna2_production
+  username: egrin
+  password: egrin
   socket: /tmp/mysql.sock
 #  pool: 5
 #  timeout: 5000
