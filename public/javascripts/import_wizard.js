@@ -20,8 +20,10 @@ var wizard = {
 
     // holds the current SBEAMS project id
     // holds the current SBEAMS timestamp
+    // holds the current tiling project id
     sbeamsProjectId: '',
     sbeamsTimestamp: '',
+    tilingProjectId: '',
 
     // holds the currently selected condition names contained in the
     // group assign step. It is cleared after groups were assigned
@@ -41,8 +43,10 @@ var wizard = {
     // contains all the timestamp folders from sbeams pipeline/project_id directory
     timestamps: [],
 
-    // holds the selected project id from dropdown of project ids
-    selectedProjectId: ''
+    // contains all the project ids from the tiling directory on bragi
+    tilingProjectIds: [],
+
+    checkedValue: ''
 
 };
 
@@ -290,7 +294,6 @@ wizard.createProjectIdSelectBox = function() {
     $(result).replaceAll('#sbeams_project_id'); 
 
     $('#sbeams_project_id').change(function() {
-        console.debug('changed to: ' + $(this).val());
     	$.ajax({
 		url: 'import_wizard/get_sbeams_timestamp_dirs?project_id=' + $(this).val(),
         	dataType: 'json',
@@ -319,6 +322,28 @@ wizard.reloadProjectIdsSelectBox = function() {
         success: function(result) {
             wizard.projectIds = result;
 	    wizard.createProjectIdSelectBox();
+        }
+    });
+};
+
+wizard.createTilingProjectIdSelectBox = function() {
+    var result = '<select id="tiling_project_id" disabled>'; 
+    for (var i = 0; i < wizard.tilingProjectIds.length; i++) {
+        var tiling_project = wizard.tilingProjectIds[i];
+        result += '<option value="' + tiling_project + '">' + tiling_project + '</option>';
+    }
+    result += '</select>';
+    $(result).replaceAll('#tiling_project_id'); 
+
+};
+
+wizard.reloadTilingProjectIdsSelectBox = function() {
+    $.ajax({
+	url: 'import_wizard/get_tiling_project_dirs',
+        dataType: 'json',
+        success: function(result) {
+            wizard.tilingProjectIds = result;
+	    wizard.createTilingProjectIdSelectBox();
         }
     });
 };
@@ -401,6 +426,10 @@ wizard.displayStep1ErrorBox = function(messages) {
 };
 
 
+
+
+
+
 // Application entry point
 $(document).ready(function() {
     $.history.init(function(hash) {
@@ -415,35 +444,85 @@ $(document).ready(function() {
     $('#import_error_report').hide();
 
     wizard.createProjectIdSelectBox();
+    wizard.createTilingProjectIdSelectBox();
+
+    var checkedValue = 'sbeams';
+    console.debug('checkedValue1: ' + checkedValue);
+    $("input:radio[@name=input_type]").click(function() {
+       checkedValue = $(this).val();
+
+       if (checkedValue == 'sbeams') {
+           console.debug('changed to: ' + checkedValue);
+	   $("#sbeams_project_id").attr('disabled',false);	   
+	   $("#sbeams_timestamp").attr('disabled',false);	   
+	   $("#tiling_project_id").attr('disabled',true);
+       } else if (checkedValue == 'tiling') {
+           console.debug('changed to: ' + checkedValue);
+	   $("#tiling_project_id").attr('disabled',false);
+	   $("#sbeams_project_id").attr('disabled',true);	   
+	   $("#sbeams_timestamp").attr('disabled',true);	   
+       } else {
+          //alert('You haven't chosen a project');   
+       }	        
+    });
 
 
     $('#next_1_3').click(function() {
         var sbeamsProjectId = $('#sbeams_project_id').val();
         var sbeamsTimestamp = $('#sbeams_timestamp').val();
-        
-        if (sbeamsProjectId == '' || sbeamsTimestamp == '') {
-            wizard.displayStep1ErrorBox(['SBEAMS project or timestamp missing']);
-        } else if (wizard.sbeamsProjectId != sbeamsProjectId ||
-                   wizard.sbeamsTimestamp != sbeamsTimestamp) {
-            $('#step1-errorbox').hide();
-            $.ajax({
-                url: 'import_wizard/conditions_and_groups?project_id=' + sbeamsProjectId +
-                    '&timestamp=' + sbeamsTimestamp,
-                dataType: 'json',
-                success: function(result) {
-                    wizard.conditionsAndGroups = result;
-                    wizard.sbeamsProjectId = sbeamsProjectId;
-                    wizard.sbeamsTimestamp = sbeamsTimestamp;
-                    $(wizard.makeConditionAndGroupsTable()).replaceAll('#condition-list');
-                    $(wizard.makeMetadataTable()).replaceAll('#metadata-table');
-                    wizard.displayStep(2);
-                },
-                error: function() {
-                    wizard.displayStep1ErrorBox(['Server down or faulty SBEAMS information']);
-                }
-            });
-        } else {
-            wizard.displayStep(2);
+	var tilingProjectId = $('#tiling_project_id').val();
+
+           console.debug('sbeamsProjId: ' + sbeamsProjectId);	
+           console.debug('sbeamsTimestamp: ' + sbeamsTimestamp);
+           console.debug('tilingProjId: ' + tilingProjectId);		
+           console.debug('checked value: ' + checkedValue);        
+	if (checkedValue == 'sbeams') {
+            if (sbeamsProjectId == '' || sbeamsTimestamp == '') {
+                wizard.displayStep1ErrorBox(['SBEAMS project or timestamp missing']);
+            } else if (wizard.sbeamsProjectId != sbeamsProjectId ||
+                       wizard.sbeamsTimestamp != sbeamsTimestamp) {
+                $('#step1-errorbox').hide();
+                $.ajax({
+                    url: 'import_wizard/conditions_and_groups_sbeams?project_id=' + sbeamsProjectId +
+                        '&timestamp=' + sbeamsTimestamp,
+                    dataType: 'json',
+                    success: function(result) {
+                        wizard.conditionsAndGroups = result;
+                        wizard.sbeamsProjectId = sbeamsProjectId;
+                        wizard.sbeamsTimestamp = sbeamsTimestamp;
+                        $(wizard.makeConditionAndGroupsTable()).replaceAll('#condition-list');
+                        $(wizard.makeMetadataTable()).replaceAll('#metadata-table');
+                        wizard.displayStep(2);
+                    },
+                    error: function() {
+                        wizard.displayStep1ErrorBox(['Server down or faulty SBEAMS information']);
+                    }
+                });
+	    } else {
+                wizard.displayStep(2);
+            }
+	} else {
+            if (tilingProjectId == '') {
+                wizard.displayStep1ErrorBox(['Tiling project missing']);
+            } else if (wizard.tilingProjectId != tilingProjectId) {
+                $('#step1-errorbox').hide();
+                $.ajax({
+                    url: 'import_wizard/conditions_and_groups_tiling?project_id=' + tilingProjectId,
+                    dataType: 'json',
+                    success: function(result) {
+                        wizard.conditionsAndGroups = result;
+                        wizard.tilingProjectId = tilingProjectId;
+                        $(wizard.makeConditionAndGroupsTable()).replaceAll('#condition-list');
+                        $(wizard.makeMetadataTable()).replaceAll('#metadata-table');
+                        wizard.displayStep(2);
+                    },
+                    error: function() {
+                        wizard.displayStep1ErrorBox(['Server down or faulty Tiling information']);
+                    }
+                });
+	    } else {
+                wizard.displayStep(2);
+            }
         }
     });
 
@@ -462,6 +541,7 @@ $(document).ready(function() {
 
     // data load
     wizard.reloadProjectIdsSelectBox();
+    wizard.reloadTilingProjectIdsSelectBox();
     wizard.reloadGroupSelectBox();
     wizard.loadUnits();
     wizard.loadMetadataTypes();

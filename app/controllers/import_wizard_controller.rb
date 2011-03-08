@@ -17,7 +17,33 @@ class Metadata
 end
 
 class ImportWizardController < ApplicationController
+
+  include EchidnaImport
   def index
+  end
+
+  # get the list of directories in the tiling project_id directory
+  def get_tiling_project_dirs()
+    directory_name = "/local/echidna_data/microarray/tiling"
+    dir_list = Pathname.new(directory_name).children.select { |c| c.directory? }.collect { |p| p.to_s }
+
+    all_names = []
+    all_names_sorted = []
+    dir_list.each do |folder_name|
+      name = {}
+      name = File.basename(folder_name)
+
+      if name.starts_with? '.'
+      else 
+        all_names << name
+      end
+      
+    end
+
+    all_names_sorted = all_names.sort { |x,y| x <=> y }
+
+    render :json => all_names_sorted
+
   end
 
   # get the list of directories in the sbeams project_id directory
@@ -26,18 +52,21 @@ class ImportWizardController < ApplicationController
     dir_list = Pathname.new(directory_name).children.select { |c| c.directory? }.collect { |p| p.to_s }
 
     all_names = []
+    all_names_sorted = []
     dir_list.each do |folder_name|
       name = {}
       name = File.basename(folder_name)
 
       if name.starts_with? '.'
-      else
+      else 
         all_names << name
       end
       
     end
 
-    render :json => all_names.sort 
+    all_names_sorted = all_names.sort { |x,y| x <=> y }
+
+    render :json => all_names_sorted
 
   end
 
@@ -58,12 +87,22 @@ class ImportWizardController < ApplicationController
   end
 
   # render conditions and groups as an HTML table with id 'condition-list'
-  def conditions_and_groups
-    importer = EchidnaImport::SbeamsImporter.new(ECHIDNA_CONFIG['arrays_dir'],
-                                                 params[:project_id],
-                                                 params[:timestamp])
+  def conditions_and_groups_sbeams
+    conditions = (conditions_for_sbeams(ECHIDNA_CONFIG['arrays_dir'],
+                                                     params[:project_id],
+                                                     params[:timestamp]))
+    conditions_and_groups(conditions)
+  end
+
+  def conditions_and_groups_tiling
+    conditions = (conditions_for_tiling(ECHIDNA_CONFIG['tiling_dir'],
+                                        params[:project_id]))
+    conditions_and_groups(conditions)
+  end
+
+  # render conditions and groups as an HTML table with id 'condition-list'
+  def conditions_and_groups(conditions)
     condition_and_groups = []
-    conditions = importer.conditions
     conditions.each do |condition_name|
       condition = {}
       condition['condition'] = condition_name
