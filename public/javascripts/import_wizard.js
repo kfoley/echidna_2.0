@@ -501,7 +501,7 @@ $(document).ready(function() {
 	    } else {
                 wizard.displayStep(2);
             }
-	} else {
+	} else if (checkedValue == 'tiling') {
             if (tilingProjectId == '') {
                 wizard.displayStep1ErrorBox(['Tiling project missing']);
             } else if (wizard.tilingProjectId != tilingProjectId) {
@@ -523,7 +523,9 @@ $(document).ready(function() {
 	    } else {
                 wizard.displayStep(2);
             }
-        }
+        } else {
+            //wizard.displayStep1ErrorBox(['You didn't choose a location for your data']);
+	}
     });
 
     $('#next_2_3').click(function() {

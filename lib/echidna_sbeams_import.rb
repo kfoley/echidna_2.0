@@ -13,7 +13,10 @@ module EchidnaImport
     if File.directory?(dir)
       result = []
       Dir.new(dir).each {|file|
-        result << file if file.end_with?('.sig')
+        if file.start_with?('._')
+        else
+          result << file if file.end_with?('.sig')
+        end
       }
       result
     else
