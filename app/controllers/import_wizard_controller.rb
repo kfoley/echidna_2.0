@@ -153,17 +153,29 @@ private
     condition_map
   end
 
+  # tries to get a property from the database first, and only creates one if it does
+  # not exist
+  def get_property(key, value)
+    prop = Property.find_by_key_and_value(key, value)
+    if prop.nil?
+      Property.create(:key => key, :value => value)
+    else
+      prop
+    end
+  end
+
   def import_global_properties(condition_map, import_data)
-    species      = Property.new(:key => 'species',      :value => import_data['species'])
-    data_type    = Property.new(:key => 'data type',    :value => import_data['dataType'])
-    slide_type   = Property.new(:key => 'slide type',   :value => import_data['slideType'])
-    platform     = Property.new(:key => 'platform',     :value => import_data['platform'])
-    slide_format = Property.new(:key => 'slide format', :value => import_data['slideFormat'])
+    species      = get_property('species',      import_data['species'])
+    data_type    = get_property('data_type',    import_data['dataType'])
+    slide_type   = get_property('slide_type',   import_data['slideType'])
+    platform     = get_property('platform',     import_data['platform'])
+    slide_format = get_property('slide format', import_data['slideFormat'])
+
     condition_map.each {|condition_name, condition|
-      CompositesProperties.create(:property => species, :composite => condition)
-      CompositesProperties.create(:property => data_type, :composite => condition)
-      CompositesProperties.create(:property => slide_type, :composite => condition)
-      CompositesProperties.create(:property => platform, :composite => condition)
+      CompositesProperties.create(:property => species,      :composite => condition)
+      CompositesProperties.create(:property => data_type,    :composite => condition)
+      CompositesProperties.create(:property => slide_type,   :composite => condition)
+      CompositesProperties.create(:property => platform,     :composite => condition)
       CompositesProperties.create(:property => slide_format, :composite => condition)
     }
   end
