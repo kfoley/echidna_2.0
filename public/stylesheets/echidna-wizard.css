@@ -33,11 +33,28 @@
 .wizard-question {
     margin-top: 2em;
     font-size: 12pt;
-    text-decoration: underline;
+    /*text-decoration: underline;*/
 }
 
 .wizard-form-row {
     margin-top: 10pt;
+}
+
+.wizard-form-row-indent {
+    position: relative;
+    left: 23em;
+    top: -3.5em;
+    width: 75%
+}
+
+.wizard-form-label {
+    text-align: right;
+    display: inline-block;
+    width: 120px;
+}
+
+.wizard-form-response {
+    text-align: left;
 }
 
 th {
@@ -57,4 +74,47 @@ input.metadata-value {
 
 .disabled {
     color: #cccccc;
+}
+
+.sub-indent {
+    margin-left: 4em;
+}
+
+.horiz-line {
+    margin-left: 1em;
+    width: 560px;
+    border-bottom: 1px solid #888888;
+}
+
+#add-new-global-term {
+    margin-top: 1em;
+    margin-left: 4em;
+}
+
+#dialog-right-label {
+    position: relative;
+    top: -2em;
+    left: 20px;
+}
+#dialog-right {
+    position: relative;
+    left: 15em;
+    top: -2.5em;
+}
+
+#import_error_report {
+    color: red;
+}
+
+#italic-label {
+    font-style: italic;
+}
+
+th#wrap-name {
+    word-wrap: break-word;
+}
+
+#metadata-table {
+    /*table-layout: fixed;*/
+    /*width: 1200px;*/
 }

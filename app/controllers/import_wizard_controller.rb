@@ -24,7 +24,7 @@ class ImportWizardController < ApplicationController
 
   # get the list of directories in the tiling project_id directory
   def get_tiling_project_dirs()
-    directory_name = "/local/echidna_data/microarray/tiling"
+    directory_name = "#{ECHIDNA_CONFIG['tiling_dir']}"
     dir_list = Pathname.new(directory_name).children.select { |c| c.directory? }.collect { |p| p.to_s }
 
     all_names = []
@@ -166,8 +166,8 @@ private
 
   def import_global_properties(condition_map, import_data)
     species      = get_property('species',      import_data['species'])
-    data_type    = get_property('data_type',    import_data['dataType'])
-    slide_type   = get_property('slide_type',   import_data['slideType'])
+    data_type    = get_property('data type',    import_data['dataType'])
+    slide_type   = get_property('slide type',   import_data['slideType'])
     platform     = get_property('platform',     import_data['platform'])
     slide_format = get_property('slide format', import_data['slideFormat'])
 

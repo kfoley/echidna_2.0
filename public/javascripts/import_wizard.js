@@ -92,6 +92,7 @@ wizard.displayImportFailure = function() {
     $.history.load(4);
 }
 
+
 // *****************************
 // *** Step 2 functions
 // *********************
@@ -200,6 +201,8 @@ wizard.updateGroupSelectBox = function() {
     $(result).replaceAll('#all-condition-groups');
 };
 
+
+
 wizard.reloadGroupSelectBox = function() {
     $.ajax({
         url: 'composites/allgroups',
@@ -211,6 +214,21 @@ wizard.reloadGroupSelectBox = function() {
     });
 };
 
+wizard.reloadGlobalTermsSelectBox = function() {
+    $.ajax({
+        url: 'vocabulary/global_terms',
+        //dataType: 'json',
+        success: function(result) {
+	    $(result).replaceAll();
+	    //$(result).replaceAll('#import_datatype');
+	    //$(result).replaceAll('#import_technology');
+            //wizard.allSpecies = result;
+            //wizard.updateSpeciesSelectBox();
+        }
+    });
+};
+
+
 // *****************************
 // *** Step 3 functions
 // *********************
@@ -221,7 +239,7 @@ wizard.addMetadataRow = function() {
 };
 
 wizard.makeSelectBoxFromStringArray = function(index, basename, array, defaultValue) {
-    var result = '<select name="' + basename + index +'">';
+    var result = '<select id="' + basename + index +'" name="' + basename + index +'">';
     if (defaultValue != null)  result += '<option value="">' + defaultValue + '</option>';
     for (var i = 0; i < array.length; i++) {
         result += '<option>' + array[i] + '</option>';
@@ -282,6 +300,21 @@ wizard.loadMetadataTypes = function() {
             wizard.metadataTypes = result;
         }
     });
+};
+
+wizard.createAndAddMetadata = function(metadataName) {
+    var lastRow = $('#metadata-table tr:last');
+    var rowIndex = lastRow.index(lastRow);
+
+    wizard.metadataTypes.push(metadataName);
+    wizard.updateMetadataSelectBox(rowIndex);
+};
+
+wizard.updateMetadataSelectBox = function(rowIndex) {
+    console.debug('rowIndex = ' + rowIndex);
+    var result = wizard.makeMetadataSelectBox(rowIndex);
+    console.debug('rowResult = ' + result);
+    $(result).replaceAll('#metadata_type_' + rowIndex);
 };
 
 wizard.createProjectIdSelectBox = function() {
@@ -348,6 +381,8 @@ wizard.reloadTilingProjectIdsSelectBox = function() {
     });
 };
 
+
+
 wizard.submitData = function() {
     var lastRow = $('#metadata-table tr:last');
     var table = lastRow.parent();
@@ -362,6 +397,7 @@ wizard.submitData = function() {
 
     submitData.sbeamsProjectId = $('#sbeams_project_id').val();
     submitData.sbeamsTimestamp = $('#sbeams_timestamp').val();
+    submitData.tilingProjectId = $('#tiling_project_id').val();
     submitData.conditionsAndGroups = wizard.conditionsAndGroups;
     submitData.metadata = [];
     
@@ -392,6 +428,26 @@ wizard.submitData = function() {
 // ****************************
 // **** Application wiring
 // ************************
+function addStep1EventHandlers() {
+
+    $('#create-global-term').click(function() {
+        $('#new-global-dialog').dialog('open');
+    });
+
+    // setup dialog
+    $('#new-global-dialog').dialog({title: 'Create Global Term',
+                                   buttons: { 'Ok': function() {
+                                       //wizard.doSomethingHere;
+                                       $(this).dialog('close');
+                                   },
+                                              'Cancel': function() { $(this).dialog('close'); } },
+                                   modal: true,
+				   width: '500'
+                                  });
+    $('#new-global-dialog').dialog('close');
+
+}
+
 function addStep2EventHandlers() {
     $('#checkall').click(function() {
         $('td :checkbox').attr('checked', $('#checkall').attr('checked'));
@@ -409,9 +465,31 @@ function addStep2EventHandlers() {
                                        $(this).dialog('close');
                                    },
                                               'Cancel': function() { $(this).dialog('close'); } },
-                                   modal: true
+                                   modal: true,
+				   width: '500'
                                   });
     $('#new-group-dialog').dialog('close');
+}
+
+function addStep3EventHandlers() {
+    $('#add-metadata-term').click(function() {
+        $('#new-metadata-dialog').dialog('open');
+    });
+
+    // setup dialog
+    $('#new-metadata-dialog').dialog({title: 'Add New Metadata',
+                                   buttons: { 'Ok': function() {
+                                       	      	    wizard.createAndAddMetadata($('#new-metadata-name').val());
+                                       	      	    $(this).dialog('close');
+                                   	      },
+                                              'Cancel': function() { 
+					      	    $(this).dialog('close'); 
+					      } 
+					    },
+                                   modal: true,
+				   width: '500'
+                                  });
+    $('#new-metadata-dialog').dialog('close');
 }
 
 wizard.displayStep1ErrorBox = function(messages) {
@@ -424,11 +502,6 @@ wizard.displayStep1ErrorBox = function(messages) {
     $(message).replaceAll('#step1-errorbox');
     $('#step1-errorbox').show();
 };
-
-
-
-
-
 
 // Application entry point
 $(document).ready(function() {
@@ -466,7 +539,7 @@ $(document).ready(function() {
        }	        
     });
 
-
+    addStep1EventHandlers();
     $('#next_1_3').click(function() {
         var sbeamsProjectId = $('#sbeams_project_id').val();
         var sbeamsTimestamp = $('#sbeams_timestamp').val();
@@ -524,7 +597,7 @@ $(document).ready(function() {
                 wizard.displayStep(2);
             }
         } else {
-            //wizard.displayStep1ErrorBox(['You didn't choose a location for your data']);
+            //placeholder for new condition check
 	}
     });
 
@@ -535,13 +608,16 @@ $(document).ready(function() {
     $('#prev_3_3').click(function() { history.go(-1); });
 
     addStep2EventHandlers();
+    addStep3EventHandlers();
+
     $('#add-metadata-row').click(wizard.addMetadataRow);
 
     $('#submit-data').click(wizard.submitData);
 
 
-
     // data load
+    wizard.reloadGlobalTermsSelectBox();
+    //wizard.reloadSpeciesSelectBox();
     wizard.reloadProjectIdsSelectBox();
     wizard.reloadTilingProjectIdsSelectBox();
     wizard.reloadGroupSelectBox();

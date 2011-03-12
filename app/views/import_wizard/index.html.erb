@@ -10,30 +10,49 @@
       <div id="form-content_1" class="wizard-form-box">
         <div class="wizard-form-header"><span class="wizard-form-caption">Import New Experiment</span></div>
         <div class="wizard-form-content">
-          <div class="wizard-question">What type of data are you importing ?</div>
+          <div class="wizard-question"><span id="italic-label">What</span> type of data are you importing ?</div>
+
+          <div id="add-new-global-term">
+            <span id="italic-label">Don't see your term in the dropdowns?</span>
+            <input id="create-global-term" type="submit" value="New Global Term Name...">
+          </div>	  
           <div class="wizard-form-row">
             <span>
-              <span>1) Species:</span> <span><%= select("import", "species", Species.all.collect {|s| [s.name, s.name] }) %></span>
+              <span class="wizard-form-label">Species:</span><span><select id="import_species"><option>some species name</option></select></span>
             </span>
+	  </div>
+          <div class="wizard-form-row">
             <span>
-              <span>2) Data Type:</span> <span><%= select("import", "datatype", Measurement.all.collect {|m| [m.name, m.name]}) %></span>
+              <span class="wizard-form-label">Data Type:</span> <span><select id="import_datatype"><option>some datatype</option></select></span>
             </span>
+	  </div>
+          <div class="wizard-form-row">
+            <span>
+              <span class="wizard-form-label">Technology:</span> <span><select id="import_technology"><option>some technology</option></select></span>
+            </span>	    
+	  </div>
+          <div class="wizard-form-row-indent">
             <!-- properties with key 'slide_type' -->
-            <span>
-              <span>3) Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.value]}) %></span>
-            </span>
-          </div>
+            <div class="wizard-form-row">
+              <span>
+		<span class="wizard-form-label">Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.value]}) %></span>
+              </span>
+            </div>
+            <div class="wizard-form-row">
+              <span>
+		<span class="wizard-form-label">Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.value]}) %></span>
+              </span>
+	    </div>
+            <div class="wizard-form-row">
+              <span hidden>
+		<span class="wizard-form-label">Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.value]}) %></span>
+              </span>
+            </div>
+	  </div>
+	  <div class="horiz-line"></div>
+          <div class="wizard-question"><span id="italic-label">Where</span> is the data you are importing ?</div>
           <div class="wizard-form-row">
-            <span>
-              <span>4) Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.value]}) %></span>
-            </span>
-            <span>
-              <span>5) Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.value]}) %></span>
-            </span>
-          </div>
-          <div class="wizard-question">Where is the data you are importing ?</div>
-          <div class="wizard-form-row">
-            <div>
+            <div class="sub-indent">
             <span>
               <span><input type="radio" name="input_type" id="sbeams" value="sbeams" checked></span>
               <span>SBEAMS Project Id: </span>
@@ -43,7 +62,7 @@
               <span><select id="sbeams_timestamp"><option>some timestamp folder</option></select></span>
             </span>
             </div>
-            <div>
+            <div class="sub-indent">
             <span>
               <span><input type="radio" name="input_type" id="tiling" value="tiling"></span>
               <span>Tiling Array Project Id: </span>
@@ -62,6 +81,14 @@
       </div>
     </div>
 
+    <!-- Step 1 Dialog -->
+    <div id="new-global-dialog">
+      <span>Global Term Name: </span><br /><span><input id="new-global-name" type="text"></span>
+      <span id="dialog-right-label">Global Term Type: </span><br /><span id="dialog-right"><%= select("import", "vocab_type", {"Species" => "1", "Measurement" => "2", "Technology" => "3"}) %></span><br />
+      <span>Technology descriptors: </span><br /><span><input id="new-global-name" type="text"></span>
+      <span id="dialog-right-label">Technology: </span><br /><span id="dialog-right"><%= select("import", "tech_desc", {"Microarray" => "1", "another Technology" => "2"}) %></span>
+    </div>
+
     <!-- Wizard Step 2 of 3 -->
     <div id="step2_3">
       <h2 class="alt">Step 2 of 3</h2>
@@ -77,8 +104,9 @@
                 <table id="condition-list">
                   <tbody>
                     <tr><td class="cond"><input type="checkbox">KO_ura3_0.55_vs_NRC_R.sig<br>
-                        Groups: groupName1, groupName2
-                    </td></tr>
+                           Groups: groupName1, groupName2
+                        </td>
+		    </tr>
                   </tbody>
                 </table>
               </div>
@@ -114,15 +142,16 @@
           </div>
           <div style="clear: both;"></div>
           <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt">
-<input id="prev_2_3" type="submit" value="Back">
-<input id="next_2_3" type="submit" value="Continue...">
-</div>
+	    <input id="prev_2_3" type="submit" value="Back">
+	    <input id="next_2_3" type="submit" value="Continue...">
+	  </div>
         </div>
       </div>
     </div>
-    <!-- Dialogs -->
+    <!-- Step 2 Dialog -->
     <div id="new-group-dialog">
-      <span>Group Name: </span><span><input id="new-group-name" type="text"></span>
+      <span>Group Name: </span><span><input id="new-group-name" type="text"></span><br />
+      <span>Group Description: </span><br /><span><textarea id="new-group-descr" rows="5" cols="20"></textarea></span>
     </div>
 
     <!-- Wizard Step 3 of 3 -->
@@ -131,7 +160,6 @@
       <div id="form-content_3" class="wizard-form-box">
         <div class="wizard-form-header"><span class="wizard-form-caption">Assign the metadata for the imported conditions</span></div>
         <div class="wizard-form-content">
-
           <table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;">
             <tbody>
               <tr>
@@ -169,12 +197,21 @@
           <div class="wizard-form-row" style="text-align: left; margin-left: 1pt; margin-top: 2pt; margin-bottom: 5pt">
             <span><input type="submit" value="+ Add row" id="add-metadata-row"></span>
           </div>
+          <div class="wizard-form-row" style="text-align: left; margin-left: 1pt; margin-top: 2pt; margin-bottom: 5pt">
+            <span><input type="submit" value="+ Add New Metadata Term" id="add-metadata-term"></span>
+          </div>
           <div class="wizard-form-row" style="text-align: right; margin-right: 5pt; margin-bottom: 5pt">
             <input type="submit" value="Back" id="prev_3_3">
             <input id="submit-data" type="submit" value="Save Medadata">
           </div>
         </div>       
       </div>
+    </div>
+
+    <!-- Step 3 Dialog -->
+    <div id="new-metadata-dialog">
+      <span>Metadata Name: </span><br /><span><input id="new-metadata-name" type="text"></span>
+      <span id="dialog-right-label">Metadata Type: </span><br /><span id="dialog-right"><%= select("import", "meta_type", {"Environmental" => "1", "Clinical" => "2", "Genetic" => "3"}) %></span>
     </div>
 
     <div id="import_success_report">
