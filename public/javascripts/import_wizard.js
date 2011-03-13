@@ -219,7 +219,8 @@ wizard.reloadGlobalTermsSelectBox = function() {
         url: 'vocabulary/global_terms',
         //dataType: 'json',
         success: function(result) {
-	    $(result).replaceAll();
+	     console.debug('global terms = ' + result);	    
+	    //$(result).replaceAll();
 	    //$(result).replaceAll('#import_datatype');
 	    //$(result).replaceAll('#import_technology');
             //wizard.allSpecies = result;
