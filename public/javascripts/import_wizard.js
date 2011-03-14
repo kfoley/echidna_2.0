@@ -25,6 +25,13 @@ var wizard = {
     sbeamsTimestamp: '',
     tilingProjectId: '',
 
+    // holds the current global term
+    // holds the current global type
+    globalTerm: '',
+    globalType: '',
+    techTerm: '',
+    techDescr: '',
+
     // holds the currently selected condition names contained in the
     // group assign step. It is cleared after groups were assigned
     selectedConditions: [],
@@ -201,8 +208,6 @@ wizard.updateGroupSelectBox = function() {
     $(result).replaceAll('#all-condition-groups');
 };
 
-
-
 wizard.reloadGroupSelectBox = function() {
     $.ajax({
         url: 'composites/allgroups',
@@ -214,13 +219,26 @@ wizard.reloadGroupSelectBox = function() {
     });
 };
 
+wizard.saveGlobalTerms = function(globalTerm, globalType, techTerm, techDescr) {
+    $.ajax({
+	url: 'vocabulary/add_new_global_terms?gTerm=' + globalTerm + '&gType=' + globalType + '&techTerm=' +
+	    techTerm + '&techDescr=' + techDescr,
+	dataType: 'json',
+	success: function() {
+	    wizard.reloadGlobalTermsSelectBox();
+	},
+	error: function() {
+	    console.debug("error inserting new terms");
+	}
+    });
+};
+
 wizard.reloadGlobalTermsSelectBox = function() {
     $.ajax({
         url: 'vocabulary/global_terms',
         //dataType: 'json',
         success: function(result) {
-	     console.debug('global terms = ' + result);	    
-	    //$(result).replaceAll();
+	    $(result).replaceAll('#global-terms');
 	    //$(result).replaceAll('#import_datatype');
 	    //$(result).replaceAll('#import_technology');
             //wizard.allSpecies = result;
@@ -382,8 +400,9 @@ wizard.reloadTilingProjectIdsSelectBox = function() {
     });
 };
 
-
-
+// ****************************
+// **** Submit Data
+// ************************
 wizard.submitData = function() {
     var lastRow = $('#metadata-table tr:last');
     var table = lastRow.parent();
@@ -438,7 +457,11 @@ function addStep1EventHandlers() {
     // setup dialog
     $('#new-global-dialog').dialog({title: 'Create Global Term',
                                    buttons: { 'Ok': function() {
-                                       //wizard.doSomethingHere;
+                                       wizard.saveGlobalTerms(
+					   $('#new-global-name').val(),
+					   $('#import_vocab_type').val(),
+					   $('#import_tech_desc').val(),
+					   $('#new-global-techD').val());
                                        $(this).dialog('close');
                                    },
                                               'Cancel': function() { $(this).dialog('close'); } },

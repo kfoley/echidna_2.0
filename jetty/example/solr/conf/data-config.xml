@@ -1,7 +1,7 @@
 <dataConfig>
   <dataSource type="JdbcDataSource"
 	      driver="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://nightingale/echidna2_production2"
+              url="jdbc:mysql://localhose/echidna2_production"
               user="kfoley"
               password="kfoley" />
   <document>

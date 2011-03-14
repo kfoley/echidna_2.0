@@ -1,5 +1,27 @@
-<%= select("import", "species", @species.map, {}, {:id => 'import_species'} ) %>
+<div id="global-terms">
+  <div class="wizard-form-row">
+    <span>
+      <span class="wizard-form-label">Species:</span><span><%= select("import", "species", @species.map, {}, {:id => 'import_species'} ) %>
+	<!--<select id="import_species"><option>some species name</option></select>-->
+      </span>
+    </span>
+  </div>
+  <div class="wizard-form-row">
+    <span>
+      <span class="wizard-form-label">Data Type:</span> <span><%= select("import", "datatype", @data_type.map, {}, {:id => 'import_datatype'} ) %>
+	<!--<select id="import_datatype"><option>some datatype</option></select>-->
+      </span>
+    </span>
+  </div>
+  <div class="wizard-form-row">
+    <span>
+      <span class="wizard-form-label">Technology:</span> <span><%= select("import", "technology", @technology.map, {}, {:id => 'import_technology'} ) %>
+	<!--<select id="import_technology"><option>some technology</option></select>-->
+      </span>
+    </span>	    
+  </div>
+</div>  
 
-<%= select("import", "datatype", @data_type.map, {}, {:id => 'import_datatype'} ) %>
 
-<%= select("import", "technology", @technology.map, {}, {:id => 'import_technology'} ) %>
+
+

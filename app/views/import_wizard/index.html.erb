@@ -15,40 +15,43 @@
           <div id="add-new-global-term">
             <span id="italic-label">Don't see your term in the dropdowns?</span>
             <input id="create-global-term" type="submit" value="New Global Term Name...">
-          </div>	  
-          <div class="wizard-form-row">
-            <span>
-              <span class="wizard-form-label">Species:</span><span><select id="import_species"><option>some species name</option></select></span>
-            </span>
-	  </div>
-          <div class="wizard-form-row">
-            <span>
-              <span class="wizard-form-label">Data Type:</span> <span><select id="import_datatype"><option>some datatype</option></select></span>
-            </span>
-	  </div>
-          <div class="wizard-form-row">
-            <span>
-              <span class="wizard-form-label">Technology:</span> <span><select id="import_technology"><option>some technology</option></select></span>
-            </span>	    
-	  </div>
-          <div class="wizard-form-row-indent">
-            <!-- properties with key 'slide_type' -->
+          </div>
+	  <div id="global-terms">
             <div class="wizard-form-row">
               <span>
-		<span class="wizard-form-label">Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.value]}) %></span>
-              </span>
-            </div>
-            <div class="wizard-form-row">
-              <span>
-		<span class="wizard-form-label">Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.value]}) %></span>
+		<span class="wizard-form-label">Species:</span><span><select id="import_species"><option>some species name</option></select></span>
               </span>
 	    </div>
             <div class="wizard-form-row">
-              <span hidden>
-		<span class="wizard-form-label">Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.value]}) %></span>
+              <span>
+		<span class="wizard-form-label">Data Type:</span> <span><select id="import_datatype"><option>some datatype</option></select></span>
               </span>
-            </div>
+	    </div>
+            <div class="wizard-form-row">
+              <span>
+		<span class="wizard-form-label">Technology:</span> <span><select id="import_technology"><option>some technology</option></select></span>
+              </span>	    
+	    </div>
 	  </div>
+            <div class="wizard-form-row-indent">
+              <!-- properties with key 'slide_type' -->
+              <div class="wizard-form-row">
+		<span>
+		  <span class="wizard-form-label">Microarray Type:</span> <span><%= select("import", "slidetype", Property.find_all_by_key('slide type').collect {|p| [p.value, p.value]}) %></span>
+		</span>
+              </div>
+              <div class="wizard-form-row">
+		<span>
+		  <span class="wizard-form-label">Microarray platform:</span> <span><%= select("import", "platform", Property.find_all_by_key('platform').collect {|p| [p.value, p.value]}) %></span>
+		</span>
+	      </div>
+              <div class="wizard-form-row">
+		<span hidden>
+		  <span class="wizard-form-label">Microarray format:</span> <span><%= select("import", "slideformat", Property.find_all_by_key('slide format').collect {|p| [p.value, p.value]}) %></span>
+		</span>
+              </div>
+	    </div>
+	  <!--</div>-->
 	  <div class="horiz-line"></div>
           <div class="wizard-question"><span id="italic-label">Where</span> is the data you are importing ?</div>
           <div class="wizard-form-row">
@@ -84,9 +87,9 @@
     <!-- Step 1 Dialog -->
     <div id="new-global-dialog">
       <span>Global Term Name: </span><br /><span><input id="new-global-name" type="text"></span>
-      <span id="dialog-right-label">Global Term Type: </span><br /><span id="dialog-right"><%= select("import", "vocab_type", {"Species" => "1", "Measurement" => "2", "Technology" => "3"}) %></span><br />
-      <span>Technology descriptors: </span><br /><span><input id="new-global-name" type="text"></span>
-      <span id="dialog-right-label">Technology: </span><br /><span id="dialog-right"><%= select("import", "tech_desc", {"Microarray" => "1", "another Technology" => "2"}) %></span>
+      <span id="dialog-right-label">Global Term Type: </span><br /><span id="dialog-right"><%= select("import", "vocab_type", {"Species" => "species", "Measurement" => "measurement", "Technology" => "technology"}) %></span><br />
+      <span>Technology descriptors: </span><br /><span><input id="new-global-techD" type="text"></span>
+      <span id="dialog-right-label">Technology: </span><br /><span id="dialog-right"><%= select("import", "tech_desc", {"Microarray" => "microarray", "another Technology" => "another Technology"}) %></span>
     </div>
 
     <!-- Wizard Step 2 of 3 -->
