@@ -31,6 +31,8 @@ var wizard = {
     globalType: '',
     techTerm: '',
     techDescr: '',
+    metadataTerm: '',
+    metadataType: '',
 
     // holds the currently selected condition names contained in the
     // group assign step. It is cleared after groups were assigned
@@ -236,17 +238,38 @@ wizard.saveGlobalTerms = function(globalTerm, globalType, techTerm, techDescr) {
 wizard.reloadGlobalTermsSelectBox = function() {
     $.ajax({
         url: 'vocabulary/global_terms',
-        //dataType: 'json',
         success: function(result) {
 	    $(result).replaceAll('#global-terms');
-	    //$(result).replaceAll('#import_datatype');
-	    //$(result).replaceAll('#import_technology');
             //wizard.allSpecies = result;
             //wizard.updateSpeciesSelectBox();
         }
     });
 };
 
+wizard.saveMetadataTerms = function(metadataTerm, metadataType) {
+    species = $('#import_species').val();
+    $.ajax({
+	url: 'vocabulary/add_new_metadata_terms?mTerm=' + metadataTerm + 
+	    '&mType=' + metadataType + '&species=' + species,
+	dataType: 'json',
+	success: function() {
+	    wizard.reloadMetadataTermsSelectBox();
+	},
+	error: function() {
+	    console.debug("error inserting new metadata terms");
+	}
+    });
+};
+
+wizard.reloadMetadataTermsSelectBox = function() {
+    $.ajax({
+	url: 'vocabulary/metadata_types',
+	success: function(result) {
+	    wizard.metadataTypes = result;
+	    wizard.createAndAddMetadata();
+	}
+    });
+};
 
 // *****************************
 // *** Step 3 functions
@@ -321,18 +344,18 @@ wizard.loadMetadataTypes = function() {
     });
 };
 
-wizard.createAndAddMetadata = function(metadataName) {
+wizard.createAndAddMetadata = function() { //metadataName) {
     var lastRow = $('#metadata-table tr:last');
     var rowIndex = lastRow.index(lastRow);
 
-    wizard.metadataTypes.push(metadataName);
+    //wizard.metadataTypes.push(metadataName);
+    //wizard.loadMetadataTypes();
     wizard.updateMetadataSelectBox(rowIndex);
 };
 
 wizard.updateMetadataSelectBox = function(rowIndex) {
-    console.debug('rowIndex = ' + rowIndex);
+    wizard.loadMetadataTypes();
     var result = wizard.makeMetadataSelectBox(rowIndex);
-    console.debug('rowResult = ' + result);
     $(result).replaceAll('#metadata_type_' + rowIndex);
 };
 
@@ -449,6 +472,14 @@ wizard.submitData = function() {
 // **** Application wiring
 // ************************
 function addStep1EventHandlers() {
+    $('#import_vocab_type').click(function() {
+	if ($('#import_vocab_type').val() == 'technology') {
+	    console.debug('clicked = ' + $('#import_vocab_type').val());
+	} else {
+	    console.debug('you did not choose technology');
+	}
+
+    });
 
     $('#create-global-term').click(function() {
         $('#new-global-dialog').dialog('open');
@@ -503,13 +534,13 @@ function addStep3EventHandlers() {
     // setup dialog
     $('#new-metadata-dialog').dialog({title: 'Add New Metadata',
                                    buttons: { 'Ok': function() {
-                                       	      	    wizard.createAndAddMetadata($('#new-metadata-name').val());
-                                       	      	    $(this).dialog('close');
-                                   	      },
-                                              'Cancel': function() { 
-					      	    $(this).dialog('close'); 
-					      } 
-					    },
+                                       	      	    //wizard.createAndAddMetadata($('#new-metadata-name').val());
+				       wizard.saveMetadataTerms(
+					   $('#new-metadata-name').val(),
+					   $('#import_meta_type').val());
+                                       $(this).dialog('close');
+                                   },
+                                              'Cancel': function() { $(this).dialog('close'); } },
                                    modal: true,
 				   width: '500'
                                   });
@@ -544,17 +575,14 @@ $(document).ready(function() {
     wizard.createTilingProjectIdSelectBox();
 
     var checkedValue = 'sbeams';
-    console.debug('checkedValue1: ' + checkedValue);
     $("input:radio[@name=input_type]").click(function() {
        checkedValue = $(this).val();
 
        if (checkedValue == 'sbeams') {
-           console.debug('changed to: ' + checkedValue);
 	   $("#sbeams_project_id").attr('disabled',false);	   
 	   $("#sbeams_timestamp").attr('disabled',false);	   
 	   $("#tiling_project_id").attr('disabled',true);
        } else if (checkedValue == 'tiling') {
-           console.debug('changed to: ' + checkedValue);
 	   $("#tiling_project_id").attr('disabled',false);
 	   $("#sbeams_project_id").attr('disabled',true);	   
 	   $("#sbeams_timestamp").attr('disabled',true);	   
@@ -569,10 +597,6 @@ $(document).ready(function() {
         var sbeamsTimestamp = $('#sbeams_timestamp').val();
 	var tilingProjectId = $('#tiling_project_id').val();
 
-           console.debug('sbeamsProjId: ' + sbeamsProjectId);	
-           console.debug('sbeamsTimestamp: ' + sbeamsTimestamp);
-           console.debug('tilingProjId: ' + tilingProjectId);		
-           console.debug('checked value: ' + checkedValue);        
 	if (checkedValue == 'sbeams') {
             if (sbeamsProjectId == '' || sbeamsTimestamp == '') {
                 wizard.displayStep1ErrorBox(['SBEAMS project or timestamp missing']);
@@ -646,6 +670,8 @@ $(document).ready(function() {
     wizard.reloadTilingProjectIdsSelectBox();
     wizard.reloadGroupSelectBox();
     wizard.loadUnits();
-    wizard.loadMetadataTypes();
+    wizard.reloadMetadataTermsSelectBox();
+    //wizard.loadMetadataTypes();
+    //wizard.updateMetadataSelectBox();
 
 });

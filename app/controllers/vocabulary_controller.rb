@@ -13,11 +13,15 @@ class VocabularyController < ApplicationController
   end
 
   def global_terms
-    @species = VocabularyEntry.find_by_sql("SELECT properties.value FROM properties, vocabulary_entries WHERE vocabulary_entries.vocab_type='species' AND vocabulary_entries.`key`=properties.`key`").collect {|term| term.value}    
-    #"SELECT `key` FROM vocabulary_entries WHERE vocab_type IN (select `key` from vocabulary_entries where vocab_type='species')").collect {|term| term.key}    
-    puts "TESTING .... #{@species}"
+    @species = VocabularyEntry.find_by_sql("SELECT properties.value 
+                                            FROM properties, vocabulary_entries 
+                                            WHERE vocabulary_entries.vocab_type='species' 
+                                            AND vocabulary_entries.`key`=properties.`key`").collect {|term| term.value}    
 
-    @data_type = VocabularyEntry.find_by_sql("SELECT DISTINCT properties.value FROM properties, vocabulary_entries WHERE vocabulary_entries.vocab_type='measurement' AND vocabulary_entries.`key`=properties.`key`").collect {|term| term.value}
+    @data_type = VocabularyEntry.find_by_sql("SELECT DISTINCT properties.value 
+                                              FROM properties, vocabulary_entries 
+                                              WHERE vocabulary_entries.vocab_type='measurement' 
+                                              AND vocabulary_entries.`key`=properties.`key`").collect {|term| term.value}
 
     @technology = VocabularyEntry.find_all_by_vocab_type("technology").collect {|term| term.key}    
     
@@ -78,6 +82,35 @@ class VocabularyController < ApplicationController
 
   end
 
+  def add_new_metadata_terms
+    metadataTerm = params[:mTerm]
+    metadataType = params[:mType]
+    species = params[:species]
+    sp_id = get_species_id(species)
+    # add new metadata vocab entry
+    success = add_new_entry(metadataTerm,metadataType)
+    # get vocab entry id
+    ve_id = get_metadata_id(metadataTerm)
+    # add new species vocabulary
+    SpeciesVocabulary.create(:species => sp_id,
+                             :vocabulary_entry => ve_id)
+
+    if success
+      render :json => ['true']
+    else
+      render :json => ['false']
+    end
+
+  end
+
+  def get_species_id(sp_name)
+    id = Species.find_by_name(sp_name)
+  end
+
+  def get_metadata_id(vocabTerm)
+    id = VocabularyEntry.find_by_key(vocabTerm)
+  end
+
   def add_new_property(keyK, valueV)
     entry = Property.new(:key => keyK, :value => valueV)
     success = entry.save
@@ -90,7 +123,7 @@ class VocabularyController < ApplicationController
   end
 
   def add_new_entry(keyK, valueV)
-    entry = VocabularyEntry.new(:key => keyK, :vocab_type => valueV)
+    entry = VocabularyEntry.create(:key => keyK, :vocab_type => valueV)
     success = entry.save
 
     if success

@@ -214,7 +214,7 @@
     <!-- Step 3 Dialog -->
     <div id="new-metadata-dialog">
       <span>Metadata Name: </span><br /><span><input id="new-metadata-name" type="text"></span>
-      <span id="dialog-right-label">Metadata Type: </span><br /><span id="dialog-right"><%= select("import", "meta_type", {"Environmental" => "1", "Clinical" => "2", "Genetic" => "3"}) %></span>
+      <span id="dialog-right-label">Metadata Type: </span><br /><span id="dialog-right"><%= select("import", "meta_type", {"Environmental" => "environmental", "Clinical" => "clinical", "Genetic" => "genetic"}) %></span>
     </div>
 
     <div id="import_success_report">
