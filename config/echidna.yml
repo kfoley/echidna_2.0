@@ -1,6 +1,5 @@
 development:
-  arrays_dir: /arrays
-#  arrays_dir: /Volumes/Arrays
+  arrays_dir: /Volumes/Arrays
   tiling_dir: /local/echidna_data/microarray/tiling 
   solr_url: http://localhost:8983/solr
 

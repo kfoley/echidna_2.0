@@ -33,6 +33,7 @@ var wizard = {
     techDescr: '',
     metadataTerm: '',
     metadataType: '',
+    species: '',
 
     // holds the currently selected condition names contained in the
     // group assign step. It is cleared after groups were assigned
@@ -83,7 +84,10 @@ wizard.displayStep = function(step) {
 
     if (step == 1) $('#step1_3').show();
     else if (step == 2) $('#step2_3').show();
-    else if (step == 3) $('#step3_3').show();
+    else if (step == 3) {
+ 	 wizard.reloadMetadataTermsSelectBox();
+    	 $('#step3_3').show();
+    }
     $.history.load(step);
 };
 wizard.displayImportSuccess = function() {
@@ -247,7 +251,7 @@ wizard.reloadGlobalTermsSelectBox = function() {
 };
 
 wizard.saveMetadataTerms = function(metadataTerm, metadataType) {
-    species = $('#import_species').val();
+    //species = $('#import_species').val();
     $.ajax({
 	url: 'vocabulary/add_new_metadata_terms?mTerm=' + metadataTerm + 
 	    '&mType=' + metadataType + '&species=' + species,
@@ -262,8 +266,10 @@ wizard.saveMetadataTerms = function(metadataTerm, metadataType) {
 };
 
 wizard.reloadMetadataTermsSelectBox = function() {
+    species = $('#import_species').val();
+    console.debug('species = ' + species);
     $.ajax({
-	url: 'vocabulary/metadata_types',
+	url: 'vocabulary/metadata_types?species=' + species,
 	success: function(result) {
 	    wizard.metadataTypes = result;
 	    wizard.createAndAddMetadata();
@@ -335,8 +341,9 @@ wizard.loadUnits = function() {
     });
 };
 wizard.loadMetadataTypes = function() {
+    species = $('#import_species').val();
     $.ajax({
-        url: 'vocabulary/metadata_types',
+        url: 'vocabulary/metadata_types?species=' + species,
         dataType: 'json',
         success: function(result) {
             wizard.metadataTypes = result;
@@ -472,6 +479,10 @@ wizard.submitData = function() {
 // **** Application wiring
 // ************************
 function addStep1EventHandlers() {
+    $('#import_species').click(function() {
+    	species = $('#import_species').val();
+    });
+
     $('#import_vocab_type').click(function() {
 	if ($('#import_vocab_type').val() == 'technology') {
 	    console.debug('clicked = ' + $('#import_vocab_type').val());
@@ -593,6 +604,7 @@ $(document).ready(function() {
 
     addStep1EventHandlers();
     $('#next_1_3').click(function() {
+        var species = $('#import_species').val();
         var sbeamsProjectId = $('#sbeams_project_id').val();
         var sbeamsTimestamp = $('#sbeams_timestamp').val();
 	var tilingProjectId = $('#tiling_project_id').val();
@@ -670,7 +682,7 @@ $(document).ready(function() {
     wizard.reloadTilingProjectIdsSelectBox();
     wizard.reloadGroupSelectBox();
     wizard.loadUnits();
-    wizard.reloadMetadataTermsSelectBox();
+
     //wizard.loadMetadataTypes();
     //wizard.updateMetadataSelectBox();
 

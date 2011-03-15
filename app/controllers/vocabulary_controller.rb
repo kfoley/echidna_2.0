@@ -5,7 +5,8 @@ class VocabularyController < ApplicationController
   end
 
   def metadata_types
-    render :json => Species.find_by_name('Halobacterium sp. NRC-1').vocabulary_entries.collect {|entry| entry.key}
+    render :json => Species.find_by_name(params[:species]).vocabulary_entries.collect {|entry| entry.key}
+    #render :json => Species.find_by_name('Halobacterium sp. NRC-1').vocabulary_entries.collect {|entry| entry.key}
   end
 
   def global_terms_test
@@ -13,15 +14,9 @@ class VocabularyController < ApplicationController
   end
 
   def global_terms
-    @species = VocabularyEntry.find_by_sql("SELECT properties.value 
-                                            FROM properties, vocabulary_entries 
-                                            WHERE vocabulary_entries.vocab_type='species' 
-                                            AND vocabulary_entries.`key`=properties.`key`").collect {|term| term.value}    
+    @species = Species.find(:all).collect {|term| term.name}
 
-    @data_type = VocabularyEntry.find_by_sql("SELECT DISTINCT properties.value 
-                                              FROM properties, vocabulary_entries 
-                                              WHERE vocabulary_entries.vocab_type='measurement' 
-                                              AND vocabulary_entries.`key`=properties.`key`").collect {|term| term.value}
+    @data_type = Measurement.find(:all).collect {|term| term.name}
 
     @technology = VocabularyEntry.find_all_by_vocab_type("technology").collect {|term| term.key}    
     
@@ -52,10 +47,13 @@ class VocabularyController < ApplicationController
 
     if (globalTerm != '')
       if (globalType == 'species') 
-        # add new property
+        # add new species to species table and add new property to property table
+        Species.create(:name => globalTerm)
         success1 = add_new_property(globalType,globalTerm)
       elsif (globalType == 'measurement')
+        # add new measurement to measurement table and
         # add new property, change Type to 'data type'
+        Measurement.create(:name => globalTerm)
         globalType = 'data type'
         success1 = add_new_property(globalType,globalTerm)
       else
