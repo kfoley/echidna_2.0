@@ -353,7 +353,9 @@ wizard.loadMetadataTypes = function() {
 wizard.createAndAddMetadata = function() { //metadataName) {
     var lastRow = $('#metadata-table tr:last');
     var rowIndex = lastRow.index(lastRow);
-    wizard.updateMetadataSelectBox(rowIndex);
+    for (var i = rowIndex; i < lastRow.index(); i++) {   
+    	wizard.updateMetadataSelectBox(i); //(rowIndex);
+    }
 };
 
 wizard.updateMetadataSelectBox = function(rowIndex) {
@@ -469,13 +471,13 @@ wizard.submitData = function() {
     }
     // use json2.js to turn the data into JSON
     var jsonStr = JSON.stringify(submitData);
-    //$.ajax({
-    //    type: 'POST',
-    //    url: 'import_wizard/import_data',
-    //    data: {import_data: jsonStr},
-    //    success: function() { wizard.displayImportSuccess(); },
-    //    error: function() { wizard.displayImportFailure(); }
-    //});
+    $.ajax({
+        type: 'POST',
+        url: 'import_wizard/import_data',
+        data: {import_data: jsonStr},
+        success: function() { wizard.displayImportSuccess(); },
+        error: function() { wizard.displayImportFailure(); }
+    });
 };
 
 // ****************************
