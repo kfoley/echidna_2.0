@@ -33,7 +33,7 @@ var wizard = {
     techDescr: '',
     metadataTerm: '',
     metadataType: '',
-    species: '',
+    species: 'sbeams',
 
     // holds the currently selected condition names contained in the
     // group assign step. It is cleared after groups were assigned
@@ -267,7 +267,6 @@ wizard.saveMetadataTerms = function(metadataTerm, metadataType) {
 
 wizard.reloadMetadataTermsSelectBox = function() {
     species = $('#import_species').val();
-    console.debug('species = ' + species);
     $.ajax({
 	url: 'vocabulary/metadata_types?species=' + species,
 	success: function(result) {
@@ -355,8 +354,6 @@ wizard.createAndAddMetadata = function() { //metadataName) {
     var lastRow = $('#metadata-table tr:last');
     var rowIndex = lastRow.index(lastRow);
 
-    //wizard.metadataTypes.push(metadataName);
-    //wizard.loadMetadataTypes();
     wizard.updateMetadataSelectBox(rowIndex);
 };
 
@@ -437,6 +434,7 @@ wizard.submitData = function() {
     var lastRow = $('#metadata-table tr:last');
     var table = lastRow.parent();
     var rows = table.children();
+
     // in this table, row 0 is the header, so there are (rows.length - 1) data rows
     var submitData = {};
     submitData.species = $('#import_species').val();
@@ -445,9 +443,14 @@ wizard.submitData = function() {
     submitData.platform = $('#import_platform').val();
     submitData.slideFormat = $('#import_slideformat').val();
 
-    submitData.sbeamsProjectId = $('#sbeams_project_id').val();
-    submitData.sbeamsTimestamp = $('#sbeams_timestamp').val();
-    submitData.tilingProjectId = $('#tiling_project_id').val();
+    if (checkedValue == 'sbeams') {
+       submitData.sbeamsProjectId = $('#sbeams_project_id').val();
+       submitData.sbeamsTimestamp = $('#sbeams_timestamp').val();
+    }
+    if (checkedValue == 'tiling') {      
+       submitData.tilingProjectId = $('#tiling_project_id').val();
+    }
+
     submitData.conditionsAndGroups = wizard.conditionsAndGroups;
     submitData.metadata = [];
     
@@ -457,22 +460,25 @@ wizard.submitData = function() {
         metadata.metadataType = $('select[name=metadata_type_' + row + ']').val();
         metadata.obspert = $('input[name=obspert_' + row + ']').val();
         metadata.conditionValues = [];
+
         for (var col = 0; col < wizard.conditionsAndGroups.length; col++) {
             var value = { };
             metadata.conditionValues.push(value);
             value.value =  $('input[name=metadata_value_' + row + '_' + col + ']').val();
             value.unit  =  $('select[name=metadata_unit_' + row + '_' + col + ']').val();
+	    console.debug('value = ' + value.value + 'unit = ' + value.unit);
         }
     }
     // use json2.js to turn the data into JSON
     var jsonStr = JSON.stringify(submitData);
-    $.ajax({
-        type: 'POST',
-        url: 'import_wizard/import_data',
-        data: {import_data: jsonStr},
-        success: function() { wizard.displayImportSuccess(); },
-        error: function() { wizard.displayImportFailure(); }
-    });
+    //console.debug('data = ' + jsonStr);
+    //$.ajax({
+    //    type: 'POST',
+    //    url: 'import_wizard/import_data',
+    //    data: {import_data: jsonStr},
+    //    success: function() { wizard.displayImportSuccess(); },
+    //    error: function() { wizard.displayImportFailure(); }
+    //});
 };
 
 // ****************************
@@ -585,7 +591,7 @@ $(document).ready(function() {
     wizard.createProjectIdSelectBox();
     wizard.createTilingProjectIdSelectBox();
 
-    var checkedValue = 'sbeams';
+    //var checkedValue = 'sbeams';
     $("input:radio[@name=input_type]").click(function() {
        checkedValue = $(this).val();
 
@@ -610,6 +616,7 @@ $(document).ready(function() {
 	var tilingProjectId = $('#tiling_project_id').val();
 
 	if (checkedValue == 'sbeams') {
+	    tilingProjectId = '';
             if (sbeamsProjectId == '' || sbeamsTimestamp == '') {
                 wizard.displayStep1ErrorBox(['SBEAMS project or timestamp missing']);
             } else if (wizard.sbeamsProjectId != sbeamsProjectId ||
@@ -635,6 +642,8 @@ $(document).ready(function() {
                 wizard.displayStep(2);
             }
 	} else if (checkedValue == 'tiling') {
+	    sbeamsProjectId = '';
+	    sbeamsTimestamp = '';
             if (tilingProjectId == '') {
                 wizard.displayStep1ErrorBox(['Tiling project missing']);
             } else if (wizard.tilingProjectId != tilingProjectId) {
@@ -677,13 +686,9 @@ $(document).ready(function() {
 
     // data load
     wizard.reloadGlobalTermsSelectBox();
-    //wizard.reloadSpeciesSelectBox();
     wizard.reloadProjectIdsSelectBox();
     wizard.reloadTilingProjectIdsSelectBox();
     wizard.reloadGroupSelectBox();
     wizard.loadUnits();
-
-    //wizard.loadMetadataTypes();
-    //wizard.updateMetadataSelectBox();
 
 });
