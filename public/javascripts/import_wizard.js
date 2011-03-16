@@ -282,7 +282,7 @@ wizard.reloadMetadataTermsSelectBox = function() {
 wizard.addMetadataRow = function() {
     var lastRow = $('#metadata-table tr:last');
     var rowIndex = lastRow.parent().children().index(lastRow);
-    lastRow.after(wizard.makeMetadataRowForEdit(rowIndex + 1));
+    lastRow.after(wizard.makeMetadataRowForEdit(rowIndex)); //was rowIndex + 1
 };
 
 wizard.makeSelectBoxFromStringArray = function(index, basename, array, defaultValue) {
@@ -353,7 +353,6 @@ wizard.loadMetadataTypes = function() {
 wizard.createAndAddMetadata = function() { //metadataName) {
     var lastRow = $('#metadata-table tr:last');
     var rowIndex = lastRow.index(lastRow);
-
     wizard.updateMetadataSelectBox(rowIndex);
 };
 
@@ -460,18 +459,16 @@ wizard.submitData = function() {
         metadata.metadataType = $('select[name=metadata_type_' + row + ']').val();
         metadata.obspert = $('input[name=obspert_' + row + ']').val();
         metadata.conditionValues = [];
-
+	
         for (var col = 0; col < wizard.conditionsAndGroups.length; col++) {
             var value = { };
             metadata.conditionValues.push(value);
             value.value =  $('input[name=metadata_value_' + row + '_' + col + ']').val();
             value.unit  =  $('select[name=metadata_unit_' + row + '_' + col + ']').val();
-	    console.debug('value = ' + value.value + 'unit = ' + value.unit);
         }
     }
     // use json2.js to turn the data into JSON
     var jsonStr = JSON.stringify(submitData);
-    //console.debug('data = ' + jsonStr);
     //$.ajax({
     //    type: 'POST',
     //    url: 'import_wizard/import_data',
