@@ -33,7 +33,7 @@ var wizard = {
     techDescr: '',
     metadataTerm: '',
     metadataType: '',
-    species: 'sbeams',
+    species: '',
 
     // holds the currently selected condition names contained in the
     // group assign step. It is cleared after groups were assigned
@@ -56,7 +56,7 @@ var wizard = {
     // contains all the project ids from the tiling directory on bragi
     tilingProjectIds: [],
 
-    checkedValue: ''
+    checkedValue: 'sbeams'
 
 };
 
@@ -590,9 +590,9 @@ $(document).ready(function() {
     wizard.createProjectIdSelectBox();
     wizard.createTilingProjectIdSelectBox();
 
-    //var checkedValue = 'sbeams';
+    checkedValue = 'sbeams';
     $("input:radio[@name=input_type]").click(function() {
-       checkedValue = $(this).val();
+       checkedValue = $(this).val();			
 
        if (checkedValue == 'sbeams') {
 	   $("#sbeams_project_id").attr('disabled',false);	   
