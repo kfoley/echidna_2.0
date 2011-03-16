@@ -9,4 +9,5 @@ test:
 
 production:
   arrays_dir: /net/arrays
+  tiling_dir: /local/echidna_data/microarray/tiling 
   solr_url: http://bragi.systemsbiology.net:8081/solr
