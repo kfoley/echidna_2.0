@@ -1,0 +1,22 @@
+<%# default partial to display solr document fields in catalog index view -%>
+<table id="metadata-table-search">
+  <tbody>
+  <% index_field_names.each do |solr_fname| -%>
+    <% if document.has? solr_fname %>
+	    <tr>
+		<% if (solr_fname == 'property_key') %>
+		<%= render_get_field_property :document => document, :field => solr_fname %>
+		<% elsif solr_fname == 'property_value' %>
+		<% else %>
+		<td class="<%= solr_fname.parameterize %> fname-label">
+		  <%= render_index_field_label :field => solr_fname %>
+		</td> 
+		<td class="<%= solr_fname.parameterize %> fname-value">
+		  <%= render_index_field_value :document => document, :field => solr_fname %>
+		<% end -%>
+	      </td>
+	    </tr>
+    <% end -%>
+  <% end -%>
+  </tbody>
+</table>
