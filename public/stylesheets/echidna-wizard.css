@@ -68,6 +68,32 @@ td {
     white-space: nowrap;
 }
 
+#metadata-table-search th {
+    display: inline;
+    position: relative;
+    text-align: left;
+}
+
+.name {
+    top: 0em;
+    left: 0em;
+}
+
+.group_name {
+    top: -1.5em;
+    left: 12em;
+}
+
+.property_key {
+    top: -2.9em;
+    left: 22em;
+}
+
+.property_value {
+    top: -4.5em;
+    left: 32em;
+}
+
 input.metadata-value {
     width: 5em;
 }
@@ -114,7 +140,8 @@ th#wrap-name {
     word-wrap: break-word;
 }
 
-#metadata-table {
-    /*table-layout: fixed;*/
-    /*width: 1200px;*/
+#metadata-table-search {
+    table-layout: fixed;
+    width: 27em;
+    border-right: 1px solid #AAA;
 }

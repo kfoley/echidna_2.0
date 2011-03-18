@@ -60,7 +60,7 @@ Blacklight.configure(:shared) do |config|
 
   # solr fld values given special treatment in the index (search results) view
   config[:index] = {
-    :show_link => "name",
+    :show_link => "id",
     :record_display_type => "format"
   }
 

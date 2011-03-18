@@ -17,4 +17,31 @@ module ApplicationHelper
       end
       val
     end
+
+  def render_index_field_value args
+    value = args[:value]
+    value ||= args[:document].get(args[:field], :sep => nil) if args[:document] and args[:field]
+
+    render_field_value value
+  end
+
+  def render_get_field_property args
+    value = args[:value]
+    value ||= args[:document].get(args[:field], :sep => nil) if args[:document] and args[:field]
+
+    keys ||= args[:document].get("property_key", :sep => nil) if args[:document] and args[:field]
+    vals ||= args[:document].get("property_value", :sep => nil) if args[:document] and args[:field]
+
+    html_ret = ''
+    index = 0
+    while index < keys.length
+      html_line = "<tr><td>" + keys[index].to_s + "</td> <td>" + vals[index].to_s + "</td></tr>" 
+      html_ret << html_line
+      index += 1
+    end
+
+    html_ret
+
+  end
+
 end

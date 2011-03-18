@@ -27,3 +27,41 @@ h1.site_title {background: transparent url('../images/logo.png') no-repeat top l
 h1.site_title a {display:block; height: 35px; width:138px; text-indent: -9999px; overflow: hidden; text-decoration: none; border: 0px;}
 h1.site_title a:link, h1.site_title a:visited, h1.site_title a:hover, h1.site_title a:active {border: 0px;}
 
+.kmf_defList {
+
+}
+
+dl.kmf_defList dt {
+    display: inline;
+}
+
+dl.kmf_defList dd {
+    display: inline;
+}
+
+#kmf_documents {
+    position: relative;
+    margin-top: 15px;
+}
+
+.kmf_document {
+    /*display: inline;*/
+    width: 30em;
+}
+
+.documentHeader {
+    width: 25em;
+    word-wrap: break-word;
+}
+
+.fname-label {
+    width: 3em;
+}
+
+.fname-value {
+    width: 5em;
+}
+
+.group_name {
+    word-wrap: break-word;
+}
