@@ -3,6 +3,8 @@
   <tbody>
   <% index_field_names.each do |solr_fname| -%>
     <% if document.has? solr_fname %>
+    <% puts "==========" %>
+    <% puts document.to_json %>
 	    <tr>
 		<% if (solr_fname == 'property_key') %>
 		<%= render_get_field_property :document => document, :field => solr_fname %>

@@ -565,6 +565,7 @@
       <str name="facet.field">condition_name</str>
       <str name="facet.field">measurement_type</str>
       <str name="facet.field">species_name</str>
+      <str name="facet.field">group_property</str>      
 
       <!--<str name="facet.field">data_type_name</str>-->                                                                                                                                       
 <!--      <str name="facet.field">ratio</str> -->
@@ -583,7 +584,7 @@
   </requestHandler>  
           
   <!-- for requests to get a single document; use id=666 instead of q=id:666 -->                                                                                                                
-  <requestHandler name="document" class="solr.SearchHandler" >                                                                                                                                  
+  <requestHandler name="document" class="solr.SearchHandler" >     g                                                                                                                             
     <lst name="defaults">                                                                                                                                                                       
       <str name="echoParams">all</str>                                                                                                                                                          
       <str name="fl">*</str>                                                                                                                                                                    
@@ -673,6 +674,7 @@
        <str name="facet.field">condition_name</str>
        <str name="facet.field">measurement_type</str>
        <str name="facet.field">species_name</str>
+       <str name="facet.field">group_property</str>       
        <!-- <str name="facet.field">pert_hier</str> -->
        <str name="facet.pivot">perturbation,perturbation_type</str>
 

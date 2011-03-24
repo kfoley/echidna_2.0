@@ -141,7 +141,13 @@ th#wrap-name {
 }
 
 #metadata-table-search {
-    table-layout: fixed;
-    width: 27em;
+    /*table-layout: fixed;*/
+    /*width: 55em;*/
+    /*border-right: 1px solid #AAA;*/
+}
+
+.single-cond {
     border-right: 1px solid #AAA;
+    width: 25em;
+    table-layout: fixed;
 }

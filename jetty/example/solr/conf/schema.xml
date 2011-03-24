@@ -431,15 +431,17 @@
    -->
 
     <!-- Karen's condition fields -->                                                                                             
-    <field name="name"           type="string"  indexed="true" stored="true" required="true" />
-    <field name="condition_name" type="string"  indexed="true" stored="true" required="false" />
-    <field name="group_name"     type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="species_name"           type="string"  indexed="true" stored="true" required="true" />
+    <field name="name"                type="string" indexed="true" stored="true" required="true" />
+    <field name="condition_name"      type="text" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="condition_id"        type="int" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="group_name"          type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="species_name"        type="string" indexed="true" stored="true" required="true" />
     <field name="perturbation_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="perturbation"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="property_key"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="property_value" type="string" indexed="true" stored="true" required="false" multiValued="true" />                        
-    <field name="measurement_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="perturbation"        type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="property_key"        type="text" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="property_value"      type="text" indexed="true" stored="true" required="false" multiValued="true" />                        
+    <field name="measurement_type"    type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="group_property"      type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <!-- <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/> -->
 
 

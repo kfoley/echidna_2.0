@@ -60,7 +60,7 @@ Blacklight.configure(:shared) do |config|
 
   # solr fld values given special treatment in the index (search results) view
   config[:index] = {
-    :show_link => "id",
+    :show_link => "name",
     :record_display_type => "format"
   }
 
@@ -83,7 +83,7 @@ Blacklight.configure(:shared) do |config|
 #      "sbeamsID",
       "species_name",
       "perturbation_type",
-      "group_name",
+      "name",
       "property_key"
 #      "obs_name"
     ]),
@@ -100,7 +100,7 @@ Blacklight.configure(:shared) do |config|
 #      "sbeamsID"            => "SBEAMS ID",
       "species_name"      => "Species",
       "perturbation_type" => "Perturbation Type",  
-      "group_name"        => "Group",
+      "name"        => "Group",
       "property_key"      => "Property Key"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
@@ -120,7 +120,7 @@ Blacklight.configure(:shared) do |config|
       "subject_facet" => 20,
       "language_facet" => true,
       "property_key" => 5,
-      "group_name" => 5
+      "name" => 5
     }
   }
 
@@ -134,15 +134,15 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:index_fields] = {
     :field_names => [
-      "name",
-      "measurement_type",
+      #"condition_name",
+      #"measurement_type",
       "group_name",
       "property_key",
       "property_value"
     ],
     :labels => {
-      "name"             => "Condition Name:",
-      "measurement_type" => "Data Type:",
+      #"condition_name"   => "Condition Name:",
+      #"measurement_type" => "Data Type:",
       "group_name"       => "Group Name:",
       "property_key"     => "Property Key:",
       "property_value"   => "Property Value:"
@@ -153,14 +153,14 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:show_fields] = {
     :field_names => [
-      "name",
+      "condition_name",
       "measurement_type",
       "group_name",
       "property_key",
       "property_value"
     ],
     :labels => {
-      "name"             => "Condition Name:",
+      "condition_name"             => "Condition Name:",
       "measurement_type" => "Data Type:",
       "group_name"       => "Group Name:",
       "property_key"     => "Property Key:",

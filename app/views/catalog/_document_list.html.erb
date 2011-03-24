@@ -5,7 +5,7 @@
   <% @document_list.each_with_index do |document,counter| %>
 
     <% # container for a single doc -%>
-    <td valign="top" class="kmf_document <%= render_document_class document %>">
+    <tr><td valign="top" class="kmf_document <%= render_document_class document %>">
       
       <% # header bar for doc items in index view -%>
       <div class="documentHeader yui-g">
@@ -24,7 +24,7 @@
       <% # main container for doc partial view -%>
       <%= render_document_partial document, :index %>
 
-    </td>
+    </td></tr>
     
   <% end %>
 </table>

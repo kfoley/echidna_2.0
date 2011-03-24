@@ -7,94 +7,70 @@
   <document>
     <entity name="composites" pk="id" query="SELECT id, name
 				       FROM composites
-				       WHERE type='Condition'
+				       WHERE type='ConditionGroup'
 				       AND ('${dataimporter.request.clean}' != 'false'
 				       OR updated_at > '${dataimporter.last_index_time}')">
 				       <!-- WHERE id IN (1,2,3,1000,1200)"> -->
 				       
       <field column="ID" name="composites_id" />
-      <field column="name" name="name" />
-      <field column="name" name="condition_name" />
+      <field column="group" name="name" />
+      <field column="group" name="group_name" />
 
-      <entity name="group" query="SELECT name 
-				  FROM composites 
-				  WHERE id IN (SELECT parent_id FROM groupings WHERE child_id='${composites.id}')">
-	<field column="name" name="group_name" />
+      <entity name="group_properties" query="SELECT DISTINCT p.key, c.name
+					     FROM        composites c
+					     INNER JOIN  groupings g ON c.id = g.parent_id
+					     INNER JOIN  composites_properties cp ON cp.composite_id = g.child_id
+					     INNER JOIN  properties p ON p.id = cp.property_id
+					     WHERE       c.id = '${composites.id}'">
+	<field column="p.key" name="group_property" />
       </entity>
 
-      <entity name="species" query="SELECT properties.value
-				    FROM composites_properties, vocabulary_entries, properties
-				    WHERE composites_properties.composite_id='${composites.id}'
-				    AND properties.id=composites_properties.property_id
-				    AND properties.`key`=vocabulary_entries.`key`
-				    AND properties.`key`='species'">
-	<field column="value" name="species_name" />
-      </entity>
-
-<!--   The following is for when this data becomes available in the DB
-       Basically, we are wanting to show the user:
-       1) which items/values are available for denoting perturbation
-       2) which items/values are available for denoting the metadata for a certain species
-       3) which items/values are observation properties (is_observation)
-       4) which items/values are imposed properties (deliberately changed by experimenter) (is_perturbation)
-
-       Then we'll want to retrieve the data and push it to whichever application they choose.
-       Handled via code and database, not Solr.
--->
-
-      <entity name="perturbation" query="SELECT vocabulary_entries.`key`, vocabulary_entries.vocab_type 
-					 FROM vocabulary_entries, composites_properties, properties
-					 WHERE composites_properties.composite_id='${composites.id}'
-					 AND properties.id=composites_properties.property_id
-					 AND properties.`key`=vocabulary_entries.`key`
-					 AND composites_properties.is_observation=1">
-	<field column="key" name="perturbation" />
-	<field column="vocab_type" name="perturbation_type" />
-      </entity>
-
-      <entity name="measurement" query="SELECT properties.value 
-					 FROM vocabulary_entries, composites_properties, properties
-					 WHERE composites_properties.composite_id='${composites.id}'
-					 AND properties.id=composites_properties.property_id
-					 AND properties.`key`=vocabulary_entries.`key`
-					 AND vocabulary_entries.vocab_type='measurement'">
-	<field column="value" name="measurement_type" />
-      </entity>
-
-<!--
-      <entity name="species_vocab" query="">
-	<field column="" name="metadata_type" />
-      </entity>
-
-      <entity name="obs_property" query="SELECT p.key as p_key, p.value as p_value FROM properties p, composites_properties cp
-				     WHERE cp.composite_id='${composites.id}'
-				     AND cp.is_observation=1
-				     AND p.id=cp.property_id">
-	<field column="p_key" name="property_key" />
-	<field column="p_value" name="property_value" />
-      </entity>
-
-      <entity name="pert_property" query="SELECT p.key as p_key, p.value as p_value FROM properties p, composites_properties cp
-				     WHERE cp.composite_id='${composites.id}'
-				     AND cp.is_perturbation=1
-				     AND p.id=cp.property_id">
-	<field column="p_key" name="property_key" />
-	<field column="p_value" name="property_value" />
-      </entity>
--->
-      <entity name="property" query="SELECT p.key as p_key, p.value as p_value FROM properties p, composites_properties cp
-				     WHERE cp.composite_id='${composites.id}'
-				     AND p.id=cp.property_id">
-	<field column="p_key" name="property_key" />
-	<field column="p_value" name="property_value" />
-      </entity>
-
-
-
-
+      <entity name="condition" query="SELECT id, name 
+				      FROM composites 
+				      WHERE id IN (SELECT child_id FROM groupings WHERE parent_id='${composites.id}')">
+	<entity name="name" query="SELECT name FROM composites WHERE id='${condition.id}'">
+	  <!--<field column="id" name="condition_id" />-->
+	  <field column="name" name="condition_name" />
+	  
+	  <entity name="species" query="SELECT properties.value
+					FROM composites_properties, vocabulary_entries, properties
+					WHERE composites_properties.composite_id='${condition.id}'
+					AND properties.id=composites_properties.property_id
+					AND properties.`key`=vocabulary_entries.`key`
+					AND properties.`key`='species'">
+	    <field column="value" name="species_name" />>
+	  </entity>
+	  <entity name="perturbation" query="SELECT vocabulary_entries.`key`, vocabulary_entries.vocab_type 
+					     FROM vocabulary_entries, composites_properties, properties
+					     WHERE composites_properties.composite_id='${condition.id}'
+					     AND properties.id=composites_properties.property_id
+					     AND properties.`key`=vocabulary_entries.`key`
+					     AND composites_properties.is_observation=1">
+	    <field column="key" name="perturbation" />
+	    <field column="vocab_type" name="perturbation_type" />
+	  </entity>
+	  
+	  <entity name="measurement" query="SELECT properties.value 
+					    FROM vocabulary_entries, composites_properties, properties
+					    WHERE composites_properties.composite_id='${condition.id}'
+					    AND properties.id=composites_properties.property_id
+					    AND properties.`key`=vocabulary_entries.`key`
+					    AND vocabulary_entries.vocab_type='measurement'">
+	    <field column="value" name="measurement_type" />
+	  </entity>	
+	  <entity name="property" query="SELECT p.key as p_key, p.value as p_value, c.id as cond_id
+					 FROM composites c
+					 INNER JOIN composites_properties cp ON cp.composite_id=c.id
+					 INNER JOIN properties p ON p.id=cp.property_id
+					 WHERE c.id='${condition.id}'">
+	    <field column="p_key" name="property_key" />
+	    <field column="p_value" name="property_value" />
+	    <field column="cond_id" name="condition_id" />
+	  </entity> <!-- property -->
+	</entity> <!-- condition name -->
+      </entity> <!-- conditions -->
 
     </entity>
- </document>
-
-
+  </document>
+  
 </dataConfig>
