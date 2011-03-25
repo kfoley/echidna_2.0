@@ -17,6 +17,7 @@
 		  <%= render_index_field_value :document => document, :field => solr_fname %>
 		<% end -%>
 	      </td>
+		<% get_json_for_datatables :document => document, :field => solr_fname %>
 	    </tr>
     <% end -%>
   <% end -%>

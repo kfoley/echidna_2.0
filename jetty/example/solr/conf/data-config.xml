@@ -16,13 +16,13 @@
       <field column="group" name="name" />
       <field column="group" name="group_name" />
 
-      <entity name="group_properties" query="SELECT DISTINCT p.key, c.name
+      <entity name="group_properties" query="SELECT DISTINCT p.key as g_pkey, c.name as g_name
 					     FROM        composites c
 					     INNER JOIN  groupings g ON c.id = g.parent_id
 					     INNER JOIN  composites_properties cp ON cp.composite_id = g.child_id
 					     INNER JOIN  properties p ON p.id = cp.property_id
 					     WHERE       c.id = '${composites.id}'">
-	<field column="p.key" name="group_property" />
+	<field column="g_pkey" name="group_property" />
       </entity>
 
       <entity name="condition" query="SELECT id, name 

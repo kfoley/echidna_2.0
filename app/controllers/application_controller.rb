@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
     #javascript_includes << "my_js"
   end
 
+
   # Scrub sensitive parameters from your log
   # filter_parameter_logging :password
 end
