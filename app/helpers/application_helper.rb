@@ -119,9 +119,6 @@ module ApplicationHelper
       end
       html_ret << html_line << "</tr>"
     end
-    puts "............................................."
-    puts html_ret
-    puts "............................................."
     
     html_ret
 

@@ -58,7 +58,7 @@
 					    AND vocabulary_entries.vocab_type='measurement'">
 	    <field column="value" name="measurement_type" />
 	  </entity>	
-	  <entity name="property" query="SELECT p.key as p_key, p.value as p_value, c.id as cond_id
+	  <entity name="property" query="SELECT IFNULL(p.key,'_NULL_') as p_key, IFNULL(p.value,'_NULL') as p_value, c.id as cond_id
 					 FROM composites c
 					 INNER JOIN composites_properties cp ON cp.composite_id=c.id
 					 INNER JOIN properties p ON p.id=cp.property_id
