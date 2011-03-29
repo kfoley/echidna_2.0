@@ -438,7 +438,7 @@
     <field name="species_name"        type="string" indexed="true" stored="true" required="true" />
     <field name="perturbation_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="perturbation"        type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="property_key"        type="text" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="property_key"        type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="property_value"      type="text" indexed="true" stored="true" required="false" multiValued="true" />                        
     <field name="measurement_type"    type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="group_property"      type="string" indexed="true" stored="true" required="false" multiValued="true" />

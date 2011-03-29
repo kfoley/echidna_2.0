@@ -1,25 +1,19 @@
 <%# default partial to display solr document fields in catalog index view -%>
-<table id="metadata-table-search">
-  <tbody>
-  <% index_field_names.each do |solr_fname| -%>
-    <% if document.has? solr_fname %>
-    <% puts "==========" %>
-    <% puts document.to_json %>
+<!--<table id="metadata-table-search">-->
+<table class="display dataTable">
+  <thead>
+
+
+  <% puts "---------" %>
+  <% puts document.to_json %>
+  <% puts "---------" %>
 	    <tr>
-		<% if (solr_fname == 'property_key') %>
-		<%= render_get_field_property :document => document, :field => solr_fname %>
-		<% elsif solr_fname == 'property_value' %>
-		<% else %>
-		<td class="<%= solr_fname.parameterize %> fname-label">
-		  <%= render_index_field_label :field => solr_fname %>
-		</td> 
-		<td class="<%= solr_fname.parameterize %> fname-value">
-		  <%= render_index_field_value :document => document, :field => solr_fname %>
-		<% end -%>
-	      </td>
-		<% get_json_for_datatables :document => document, :field => solr_fname %>
+	      <%= get_json_headers_datatables :document => document %>
 	    </tr>
-    <% end -%>
-  <% end -%>
+	    </thead>
+            <tbody>
+	      <%= get_json_for_datatables :document => document %>
+	    </tbody>
+
   </tbody>
 </table>

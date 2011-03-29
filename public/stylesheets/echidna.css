@@ -65,3 +65,7 @@ dl.kmf_defList dd {
 .group_name {
     word-wrap: break-word;
 }
+
+#doc4 {
+    width: auto;
+}

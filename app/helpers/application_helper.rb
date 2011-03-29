@@ -63,25 +63,77 @@ module ApplicationHelper
     html_ret
   end
 
-  def get_json_for_datatables args
-    group_props ||= args[:document].get("group_property", :sep => nil) if args[:document] and args[:field]
-    condition_ids ||= args[:document].get("condition_id", :sep => nil) if args[:document] and args[:field]
-    data_type ||= args[:document].get("measurement_type", :sep => nil) if args[:document] and args[:field]
-    conditions ||= args[:document].get("condition_name", :sep => nil) if args[:document] and args[:field]
-    keys ||= args[:document].get("property_key", :sep => nil) if args[:document] and args[:field]
-    vals ||= args[:document].get("property_value", :sep => nil) if args[:document] and args[:field]
-
-    html_ret = ''
+  def get_json_headers_datatables args
+    group_props = args[:document].get("group_property", :sep => nil) #if args[:document] and args[:field]
+    
     html_line = ''
-    index = 0
-    counter = 0
-    test = 0
-    aaData = []
-    aaRow = []
+    html_ret = ''
+    group_props.each do |prop|
+      html_line = "<th>" << prop << "</th>" 
+      html_ret << html_line
+    end
+    html_ret = "<th>Condition Id</th>" << html_ret
+    html_ret 
+  end
+
+  def get_json_for_datatables args
+    group_props = args[:document].get("group_property", :sep => nil) #if args[:document] and args[:field]
+    condition_ids = args[:document].get("condition_id", :sep => nil) #if args[:document] and args[:field]
+    data_type = args[:document].get("measurement_type", :sep => nil) #if args[:document] and args[:field]
+    conditions = args[:document].get("condition_name", :sep => nil) #if args[:document] and args[:field]
+    keys = args[:document].get("property_key", :sep => nil) #if args[:document] and args[:field]
+    vals = args[:document].get("property_value", :sep => nil) #if args[:document] and args[:field]
 
     testArray = condition_ids.zip(keys,vals)
-    array_group = testArray.group_by { |row| row[0] }
 
+    output = {}
+    testArray.each do |outer_key, inner_key, value|
+      output[outer_key] ||= {}
+      output[outer_key][inner_key] ||= []
+      output[outer_key][inner_key] << value
+    end
+
+    aaData = []
+    c_ids = []
+    c_ids = output.keys
+    sEcho = 0
+    iTotalRecords = c_ids.length
+    iTotalDisplayRecords = c_ids.length
+    html_line = ''
+    html_ret = ''
+   
+    c_ids.each_with_index do |id, index_i|
+      h_conds = output[id]
+      aaData[index_i] = []
+      aaData[index_i][0] = id
+      html_line = "<tr><td>" << id.to_s << "</td>"
+      group_props.each_with_index do |gp, index_j|
+        v = h_conds[gp]
+        if !v.nil? 
+          aaData[index_i][index_j + 1] = v
+          html_line << "<td>" << v.join(', ') << "</td>"
+        else
+          aaData[index_i][index_j + 1] = ""
+          html_line << "<td>" << " " << "</td>"
+        end          
+      end
+      html_ret << html_line << "</tr>"
+    end
+    puts "............................................."
+    puts html_ret
+    puts "............................................."
+    
+    html_ret
+
+    #aaData = [ "sEcho" => 0,
+    #           "iTotalRecords" => iTotalRecords,
+    #           "iTotalDisplayRecords" => iTotalDisplayRecords,
+    #           "aaData" => aaData
+    #         ]
+    #puts aaData.to_json
+    #render :json => aaData
+=begin
+    array_group = testArray.group_by { |row| row[0] }
     prop_keys = []
     prop_vals = []
     array_group.each_pair do |key,value|
@@ -95,15 +147,10 @@ module ApplicationHelper
       prop_vals << third_values
     end
 
-    puts prop_keys.to_json
-    puts prop_vals.to_json
-    puts "==========================="
     prop_keys.each do |elem|
       elem.each_with_index do |item,index|
-        puts "......................................"
-        puts item
-        puts group_props[index]
-        puts "......................................"
+        #puts item
+        #puts group_props[index]
       end
       #puts "#{elem.join(', ')}"
     end
@@ -126,15 +173,10 @@ module ApplicationHelper
       end
 
     }
-    #puts "********************************************"
-    #puts aaRow.to_json
-    #puts "********************************************"
+
     #aaData << aaRow
     #counter += 1
-
-    #puts "//////////////////////"
-    #puts aaData.to_json
-    #puts "//////////////////////"
+=end
   end
 
 end
