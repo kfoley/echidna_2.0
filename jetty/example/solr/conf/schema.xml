@@ -434,6 +434,7 @@
     <field name="name"                type="string" indexed="true" stored="true" required="true" />
     <field name="condition_name"      type="text" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="condition_id"        type="int" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="group_child_id"      type="int" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="group_name"          type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="species_name"        type="string" indexed="true" stored="true" required="true" />
     <field name="perturbation_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />

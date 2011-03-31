@@ -5,29 +5,24 @@
 
 <% unless @documents.empty? %>
   <%- # just adding pageEntriedInfo div to get the proper rounded corners at the top -%>
-  <div class="pageEntriesInfo"></div>
+  <div class="pageEntriesInfo">
+    <%= page_entries_info @response.docs, :entry_name=>'item' %>
+    <%=link_to "Start&nbsp;over&thinsp;", catalog_index_path, :id=>"startOverLink" %>    
+  </div>
   <%= render "catalog/sort_and_per_page" %>
   <%= render "catalog/results_pagination" %>
   <div class="tools">
+    <h2 id="export-title">Export options</h2>
     <ul class="folderTools">
       <li class="cite">
         <%= link_to "Cite", citation_catalog_path(:id => @documents.collect{|doc| doc.get(:id)}), {:id => 'citeLink', :name => 'citation', :class => 'lightboxLink'} %>
       </li>
-<% if false %><!-- start erb comment -->
       <li class="refworks">
         <%= render :partial => 'catalog/refworks_form', :locals => {:documents=>@documents} %>
       </li>
-<!-- end erb comment --><% end %>
-<!-- WW: new export types TODO -->
-
       <li class="endnote">
         <%= link_to "Export to EndNote", endnote_catalog_path(:id => @documents.collect {|doc| doc.get(:id)}, :format => 'endnote')%>
       </li>
-
-      <li class="csv">
-        <%= link_to "Export to CSV", csv_isbexport_path(:id => @documents.collect {|doc| doc.get(:id)}) %>
-      </li>
-<!-- WW: new export types END -->
       <li class="email">
         <%= link_to "Email", email_catalog_path(:id => @documents.collect {|doc| doc.get(:id)}), :class=>"lightboxLink" %>
       </li>
@@ -46,23 +41,19 @@
   </div>
 <% end %>
 
-<div id="documents">  
+<table id="kmf_documents">  
   <% @documents.each_with_index do |document, i| %>
     <% # container for a single doc -%>
-    <div class="document">
+    <tr><td valign="top" class="kmf_document">
       <% # header bar for doc items in index view -%>
       <div class="documentHeader yui-g">
         <div class="yui-u documentFunctions">          
-          <div class="in_folder">
+          <!-- <div class="in_folder"> -->
             <%= render :partial=>'catalog/folder_control', :locals=>{:document=>document} %>
-          </div>
+          <!--</div> -->
         </div>
         <div class="yui-u">
           <h3 class="index_title"><%= i + 1 + @response.params[:start].to_i%>. <%= link_to_document document, :label => document_show_link_field, :results_view => false %></h3>
-        </div>
-        <div class="yui-u">
-	  Test
-
         </div>
       </div>
       
@@ -75,9 +66,7 @@
         -->
         <span class="Z3988" title="<%= document.export_as_openurl_ctx_kev(document_partial_name(document)) %>"></span>
       <% end %>
-    </div>
-
-
+    </td></tr>
   
   <% end %>
-</div>
+</table>

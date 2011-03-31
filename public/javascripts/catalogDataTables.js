@@ -6,6 +6,7 @@
 
 var oTable;
 $(document).ready(function() {
+
      /* Initialise datatables*/ 
      oTable = $('.dataTable').dataTable({
      	    "bFilter" : false

@@ -111,7 +111,11 @@ module ApplicationHelper
         v = h_conds[gp]
         if !v.nil? 
           aaData[index_i][index_j + 1] = v
-          html_line << "<td>" << v.join(', ') << "</td>"
+          if gp == "tag"
+            html_line << "<td class=\"tag-data\">" << v.join(', ') << "</td>"
+          else
+            html_line << "<td>" << v.join(', ') << "</td>"
+          end
         else
           aaData[index_i][index_j + 1] = ""
           html_line << "<td>" << " " << "</td>"
@@ -119,16 +123,9 @@ module ApplicationHelper
       end
       html_ret << html_line << "</tr>"
     end
-    
+
     html_ret
 
-    #aaData = [ "sEcho" => 0,
-    #           "iTotalRecords" => iTotalRecords,
-    #           "iTotalDisplayRecords" => iTotalDisplayRecords,
-    #           "aaData" => aaData
-    #         ]
-    #puts aaData.to_json
-    #render :json => aaData
 =begin
     array_group = testArray.group_by { |row| row[0] }
     prop_keys = []

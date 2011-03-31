@@ -28,8 +28,8 @@
       <entity name="condition" query="SELECT id, name 
 				      FROM composites 
 				      WHERE id IN (SELECT child_id FROM groupings WHERE parent_id='${composites.id}')">
-	<entity name="name" query="SELECT name FROM composites WHERE id='${condition.id}'">
-	  <!--<field column="id" name="condition_id" />-->
+	<entity name="name" query="SELECT id, name FROM composites WHERE id='${condition.id}'">
+	  <field column="id" name="group_child_id" />
 	  <field column="name" name="condition_name" />
 	  
 	  <entity name="species" query="SELECT properties.value

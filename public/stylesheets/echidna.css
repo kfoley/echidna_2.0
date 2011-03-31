@@ -50,7 +50,7 @@ dl.kmf_defList dd {
 }
 
 .documentHeader {
-    width: 25em;
+    /*width: 25em;*/
     word-wrap: break-word;
 }
 
@@ -70,3 +70,32 @@ dl.kmf_defList dd {
     width: auto;
 }
 
+.tag-data {
+    white-space: pre-wrap;
+}
+
+table.display {
+    /*width: 945px;*/
+    margin: 0;
+}
+
+.dataTables_wrapper {
+    width: 945px;
+}
+
+.documentFunctions {
+/*    left: 13em;*/
+/*    position: relative;*/
+/*    top: -1em;*/
+    /*float: right;*/
+    vertical-align: top;
+}
+
+ul.folderTools {
+    margin-left: 25px;
+}
+
+#export-title {
+    float: left;
+    margin: 0;
+}
