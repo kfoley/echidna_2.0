@@ -18,6 +18,9 @@ class ApplicationController < ActionController::Base
     stylesheet_links << "echidna"
     stylesheet_links << "echidna-wizard"
     javascript_includes << "DataTables-1.7.6/media/js/jquery.dataTables.min.js"
+    javascript_includes << "collapsing_divs.js"
+    javascript_includes << "expando.js"
+    javascript_includes << "extendo.js"
     javascript_includes << "catalogDataTables.js"
   end
 

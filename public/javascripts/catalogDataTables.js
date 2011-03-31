@@ -7,10 +7,16 @@
 var oTable;
 $(document).ready(function() {
 
+/*  collapsing divs js listeners */
+addCollapsingDivListeners(true);
+
      /* Initialise datatables*/ 
      oTable = $('.dataTable').dataTable({
      	    "bFilter" : false
      }); 
+
+
+
 });
 
 function fnShowHide( iCol )

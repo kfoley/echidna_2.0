@@ -52,6 +52,16 @@ dl.kmf_defList dd {
 .documentHeader {
     /*width: 25em;*/
     word-wrap: break-word;
+    background-color: rgb(226, 223, 242);
+    height: 3em;
+    margin: 0 0 10px;
+    padding-top: 10px;
+    width: 945px;
+}
+
+.doc-box {
+    border: 1px solid;
+    margin-bottom: 15px;
 }
 
 .fname-label {
@@ -98,4 +108,8 @@ ul.folderTools {
 #export-title {
     float: left;
     margin: 0;
+}
+
+.showhide {
+    /*width: 945px;*/
 }
