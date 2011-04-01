@@ -62,6 +62,14 @@ dl.kmf_defList dd {
 .doc-box {
     border: 1px solid;
     margin-bottom: 15px;
+    overflow: auto;
+}
+
+.doc-box-show {
+    border: 1px solid;
+    margin-bottom: 15px;
+    /*overflow: auto;*/
+    width: 945px;
 }
 
 .fname-label {
@@ -110,6 +118,12 @@ ul.folderTools {
     margin: 0;
 }
 
-.showhide {
-    /*width: 945px;*/
+.index_title {
+    height: 2em;
+}
+
+.show-header {
+    position: relative;
+    top: -1.5em;
+    left: 1em;
 }

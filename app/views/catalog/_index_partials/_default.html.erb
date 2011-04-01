@@ -4,13 +4,11 @@
   <% puts "---------" %>
   <% puts document.to_json %>
   <% puts "---------" %>
-	    <tr>
-	      <%= get_json_headers_datatables :document => document %>
-	    </tr>
-	    </thead>
-            <tbody>
-	      <%= get_json_for_datatables :document => document %>
-	    </tbody>
-
+  <tr>
+    <%= get_json_headers_datatables :document => document %>
+  </tr>
+  </thead>
+  <tbody>
+    <%= get_json_for_datatables :document => document %>
   </tbody>
 </table>

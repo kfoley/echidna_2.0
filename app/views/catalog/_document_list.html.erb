@@ -7,25 +7,26 @@
     <% # container for a single doc -%>
     <tr><td valign="top" class="kmf_document">
       <div class="doc-box">
-      <span id="showhide_doc_<%= counter%>" class="showhide">
-      <% # header bar for doc items in index view -%>
-      <div class="documentHeader yui-g">
-        
-        <% # list controls for items/docs -%>
-	<%= render_document_functions_partial document %>
-        
-        <% # main title container for doc partial view -%>
 
-        <div class="yui-u">
-          <h3 class="index_title"><%= counter + 1 + @response.params[:start].to_i %>. <%= link_to_document document, :label=>document_show_link_field, :counter => (counter + 1 + @response.params[:start].to_i) %></h3>
-        </div>
+	  <% # header bar for doc items in index view -%>
+	  <div class="documentHeader yui-g">
+        
+            <% # list controls for items/docs -%>
+	    <%= render_document_functions_partial document %>
+        
+            <% # main title container for doc partial view -%>
+	    <span id="showhide_doc_<%= counter%>" class="showhide">
+              <div class="yui-u">
+		<h3 class="index_title"><%= counter + 1 + @response.params[:start].to_i %>. <%= link_to_document document, :label=>document_show_link_field, :counter => (counter + 1 + @response.params[:start].to_i) %></h3>
+              </div>
+	    </span>
+	  </div>
+
+	<div id="doc_<%= counter%>">
+	  <% # main container for doc partial view -%>
+	  <%= render_document_partial document, :index %>
+	</div>
       </div>
-      </span>
-      <div id="doc_<%= counter%>">
-      <% # main container for doc partial view -%>
-      <%= render_document_partial document, :index %>
-      </div>
-    </div>
     </td></tr>
     
   <% end %>

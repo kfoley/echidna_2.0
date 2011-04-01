@@ -1,13 +1,12 @@
 function addCollapsingDivListeners(openMultiple) {
 	// assumes toShowHide array exists
 	
-	var toShowHide = new Array();
+	var toShowHide = []; //new Array();
 	$('.showhide').each(
 	function() {
 		var name_ = this.id.split("_");
 		name_.shift();
 		var name = name_.join("_");
-	console.debug("toshowhide names = " + name);	
 		toShowHide.push(name);
 	});
 
@@ -21,11 +20,6 @@ function addCollapsingDivListeners(openMultiple) {
 		var parentID = "#showhide_"+toShowHide[i];
 		var child = $(childID);
 		
-		console.debug("child name = " + childName);
-		console.debug("child id = " + "#"+childName);
-		console.debug("parent id = " + "#showhide_"+toShowHide[i]);		
-		console.debug("child  = " + child);
-
 		if (child.length != 0) {
 			if (first)
 				first = false;

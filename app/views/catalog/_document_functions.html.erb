@@ -1,10 +1,4 @@
 <div class="yui-u documentFunctions">
-
-  <% document[:group_child_id].each do |c_id|%>
-  <% puts c_id %>
-  <% puts document[:group_child_id][c_id]%>  
-  <% end %>
   <%= render :partial=>'bookmark_control', :locals=>{:document=>document} %>
   <%= render :partial=>'folder_control', :locals=>{:document=>document, :display=>'button'} %>
-
 </div>
