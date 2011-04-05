@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :my_assets
 
-
   protected
   def my_assets
     stylesheet_links << "DataTables-1.7.6/media/css/demo_table_jui.css"

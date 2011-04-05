@@ -56,7 +56,7 @@ dl.kmf_defList dd {
     height: 3em;
     margin: 0 0 10px;
     padding-top: 10px;
-    width: 945px;
+    width: 960px; /*945px;*/
 }
 
 .doc-box {
@@ -68,8 +68,8 @@ dl.kmf_defList dd {
 .doc-box-show {
     border: 1px solid;
     margin-bottom: 15px;
-    /*overflow: auto;*/
-    width: 945px;
+    overflow: auto;
+    width: 960px; /*945px;*/
 }
 
 .fname-label {
@@ -98,7 +98,7 @@ table.display {
 }
 
 .dataTables_wrapper {
-    width: 945px;
+    width: 960px; /*945px;*/
 }
 
 .documentFunctions {

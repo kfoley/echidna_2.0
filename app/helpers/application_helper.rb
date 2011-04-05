@@ -1,4 +1,5 @@
 require 'vendor/plugins/blacklight/app/helpers/application_helper.rb'
+require 'uri'
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
@@ -16,6 +17,31 @@ module ApplicationHelper
         val += doc.export_as_csv + "\n"
       end
       val
+    end
+
+    # karen: adding action for getting the data locations for all documents in the "folder"
+    def dmv_export(documents)
+      uris = []
+      documents.each do |doc|
+        locations = doc[:data_location]
+        locations.each_with_index do |locs, i|
+          puts "before ========================="
+          puts locs
+          locs = CGI::escape(locs)
+          puts "after ========================="
+          puts locs
+          st = "uri"
+          uris[i] = Hash.new
+          uris[i][st] = locs
+          puts "========================"
+          puts uris[i][st]
+          puts "========================"
+          #uris << uris[i]["uri"]
+        end
+      end
+      puts "json................................"
+      puts uris.to_json
+      uris.to_json
     end
 
   def render_index_field_value args
