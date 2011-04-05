@@ -2,7 +2,9 @@
   <p><%= link_back_to_catalog %></p>
 <% end %>
 <h1>Folder</h1>
-
+<% puts "ffffffffffffffffff" %>
+<% puts @documents.to_json %>
+<% puts "ffffffffffffffffff" %>
 <% unless @documents.empty? %>
   <%- # just adding pageEntriedInfo div to get the proper rounded corners at the top -%>
   <div class="pageEntriesInfo">

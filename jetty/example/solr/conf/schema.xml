@@ -443,6 +443,7 @@
     <field name="property_value"      type="text" indexed="true" stored="true" required="false" multiValued="true" />                        
     <field name="measurement_type"    type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <field name="group_property"      type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="data_location"       type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <!-- <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/> -->
 
 

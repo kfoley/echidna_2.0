@@ -1,7 +1,7 @@
 <dataConfig>
   <dataSource type="JdbcDataSource"
 	      driver="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost/echidna2_production2"
+              url="jdbc:mysql://localhost/echidna2_production"
               user="kfoley"
               password="kfoley" />
   <document>
@@ -67,6 +67,11 @@
 	    <field column="p_value" name="property_value" />
 	    <field column="cond_id" name="condition_id" />
 	  </entity> <!-- property -->
+	  <entity name="measurement_datas" query="SELECT uri
+						  FROM measurement_datas
+						  WHERE condition_id='${condition.id}'">
+	    <field column="uri" name="data_location" />
+	  </entity>
 	</entity> <!-- condition name -->
       </entity> <!-- conditions -->
 

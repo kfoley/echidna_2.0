@@ -431,20 +431,20 @@
    -->
 
     <!-- Karen's condition fields -->                                                                                             
-    <field name="name"           type="string"  indexed="true" stored="true" required="true" />
-    <field name="condition_name" type="string"  indexed="true" stored="true" required="false" />
-    <field name="group_name"     type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="species_name"           type="string"  indexed="true" stored="true" required="true" />
+    <field name="name"                type="string" indexed="true" stored="true" required="true" />
+    <field name="condition_name"      type="text" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="condition_id"        type="int" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="group_child_id"      type="int" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="group_name"          type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="species_name"        type="string" indexed="true" stored="true" required="true" />
     <field name="perturbation_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="perturbation"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="property_key"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-    <field name="property_value" type="string" indexed="true" stored="true" required="false" multiValued="true" />                        
-    <field name="measurement_type"   type="string" indexed="true" stored="true" required="false" multiValued="true" />
-<<<<<<< HEAD
-    <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/>
-=======
+    <field name="perturbation"        type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="property_key"        type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="property_value"      type="text" indexed="true" stored="true" required="false" multiValued="true" />                        
+    <field name="measurement_type"    type="string" indexed="true" stored="true" required="false" multiValued="true" />
+    <field name="group_property"      type="string" indexed="true" stored="true" required="false" multiValued="true" />
     <!-- <field name="pert_hier" type="string" indexed="true" stored="true" multiValued="true"/> -->
->>>>>>> 3c7c136ee03359f259172fb36798f767f3f9c4c9
+
 
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
    <field name="sku" type="textTight" indexed="true" stored="true" omitNorms="true"/>
@@ -574,13 +574,8 @@
    <copyField source="manu" dest="manu_exact"/>
 
    <!-- Karen's copyField-->
-<<<<<<< HEAD
-   <copyField source="perturbation" dest="pert_hier"/>
-   <copyField source="perturbation_type" dest="pert_hier"/>
-=======
    <!-- <copyField source="perturbation" dest="pert_hier"/> -->
    <!-- <copyField source="perturbation_type" dest="pert_hier"/> -->
->>>>>>> 3c7c136ee03359f259172fb36798f767f3f9c4c9
 	
 <!-- kfoley -->                                                                                                                              
 <!--  <copyField source="*_t" dest="spell"/>                                                                                                $
