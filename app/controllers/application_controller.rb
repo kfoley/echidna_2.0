@@ -9,6 +9,12 @@ class ApplicationController < ActionController::Base
 
   before_filter :my_assets
 
+  def condition_names 
+    c_id = params[:id]
+    c_name = Composite.find_by_id(c_id)
+    render :json => c_name.name
+  end
+
   protected
   def my_assets
     stylesheet_links << "DataTables-1.7.6/media/css/demo_table_jui.css"
