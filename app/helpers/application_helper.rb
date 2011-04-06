@@ -25,22 +25,11 @@ module ApplicationHelper
       documents.each do |doc|
         locations = doc[:data_location]
         locations.each_with_index do |locs, i|
-          puts "before ========================="
-          puts locs
-          locs = CGI::escape(locs)
-          puts "after ========================="
-          puts locs
-          st = "uri"
+          #locs = CGI::escape(locs.chomp) don't need to url encode posts
           uris[i] = Hash.new
-          uris[i][st] = locs
-          puts "========================"
-          puts uris[i][st]
-          puts "========================"
-          #uris << uris[i]["uri"]
+          uris[i]["uri"] = locs
         end
       end
-      puts "json................................"
-      puts uris.to_json
       uris.to_json
     end
 

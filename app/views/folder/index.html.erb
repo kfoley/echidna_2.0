@@ -1,10 +1,14 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#pebble').click(function() {
+          $('#myform')[0].submit();
+      });
+  });
+</script>
 <% sidebar_items << capture do %>
   <p><%= link_back_to_catalog %></p>
 <% end %>
 <h1>Folder</h1>
-<% puts "ffffffffffffffffff" %>
-<% #puts @documents.to_json %>
-<% puts "ffffffffffffffffff" %>
 <% unless @documents.empty? %>
   <%- # just adding pageEntriedInfo div to get the proper rounded corners at the top -%>
   <div class="pageEntriesInfo">
@@ -17,8 +21,10 @@
     <h2 id="export-title">Export options</h2>
     <ul class="folderTools">
       <li class="dmv">
-	<a href="#" onClick="console.debug('<%= dmv_export @documents %>');"
-	<a href="#" onClick="$.ajax({type: 'POST', url: 'druid.systemsbiology.net:8080/dmv?query','<%= dmv_export @documents %>'});">DMV</a> 
+	<a href="#" id="pebble">DMV</a> 
+	<form id="myform" action="http://edgar.systemsbiology.net:8081/pebble/dmv" method="post">
+	  <input name="query" type="hidden" value='<%= dmv_export @documents %>'></input>
+	</form>
       </li>
       <li class="cite">
         <%= link_to "Cite", citation_catalog_path(:id => @documents.collect{|doc| doc.get(:id)}), {:id => 'citeLink', :name => 'citation', :class => 'lightboxLink'} %>
