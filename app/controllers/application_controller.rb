@@ -12,7 +12,9 @@ class ApplicationController < ActionController::Base
   def condition_names 
     c_id = params[:id]
     c_name = Composite.find_by_id(c_id)
-    render :json => c_name.name
+    result = Hash.new
+    result["name"] = c_name.name
+    render :json => result
   end
 
   protected
@@ -22,9 +24,13 @@ class ApplicationController < ActionController::Base
     stylesheet_links << "DataTables-1.7.6/media/css/demo_table.css"
     stylesheet_links << "echidna"
     stylesheet_links << "echidna-wizard"
+    stylesheet_links << "smoothness/jquery-ui-1.8.9.custom.css"
+    stylesheet_links << "jquery.qtip.min.css"
     javascript_includes << "DataTables-1.7.6/media/js/jquery.dataTables.min.js"
     javascript_includes << "collapsing_divs.js"
     javascript_includes << "catalogDataTables.js"
+    javascript_includes << "jquery-ui-1.8.9.custom.min.js"
+    javascript_includes << "jquery.qtip2/jquery.qtip.min.js"
   end
 
 

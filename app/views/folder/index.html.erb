@@ -1,41 +1,34 @@
-<script src="javascripts/jquery.qtip2/jquery.qtip.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-      console.debug('hello');
+
       $('#pebble').click(function() {
           $('#myform')[0].submit();
       });
 
-      $('td.sorting_1').qtip ({
-          tip: 'leftTop',
-          //content: {
-          //    text: 'qtip text',
-          //},
-          api: {
-              onRender: function() {
-                  var qtip = this;
-                  var c_id = $(this.elements['target']).attr('id');
-                  console.debug('c_id = ' + c_id );
-                  var url = 'application/condition_names?id=' + c_id;
-                  $.get(url, function(html) {
-                      qtip.updateContent(html,false);
-                      return true;
-                  });
+      $('.sorting_1').each(function(index) {
+          var c_id = $(this).text();
+          $(this).qtip ({
+              content: {
+                  text: 'Loading...',
+                  ajax: {
+                      url: 'application/condition_names',
+                      type: 'GET',
+                      data: { id: c_id },
+                      dataType: 'json',
+                      success: function(data, status) {
+                          this.set('content.text', data.name);
+                      }
+                  }
+              },
+              position: {
+                  my: 'top left',
+                  at: 'bottom right'
+              },
+              show: { 
+                  event: 'mouseenter' 
               }
-          },
-          position: {
-              corner: {
-                  target: 'rightTop',
-                  tooltip: 'topLeft'
-              }
-          },
-          style: {
-              width: 500,
-              tip: 'topLeft',
-              name: 'blue'
-          },
-          show: 'mouseover',
-          hide: 'mouseout'
+
+          });
       });
 
   });
