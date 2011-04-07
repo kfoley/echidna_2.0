@@ -5,32 +5,6 @@
           $('#myform')[0].submit();
       });
 
-      $('.sorting_1').each(function(index) {
-          var c_id = $(this).text();
-          $(this).qtip ({
-              content: {
-                  text: 'Loading...',
-                  ajax: {
-                      url: 'application/condition_names',
-                      type: 'GET',
-                      data: { id: c_id },
-                      dataType: 'json',
-                      success: function(data, status) {
-                          this.set('content.text', data.name);
-                      }
-                  }
-              },
-              position: {
-                  my: 'top left',
-                  at: 'bottom right'
-              },
-              show: { 
-                  event: 'mouseenter' 
-              }
-
-          });
-      });
-
   });
 </script>
 <% sidebar_items << capture do %>

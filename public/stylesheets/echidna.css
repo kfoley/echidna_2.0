@@ -127,3 +127,10 @@ ul.folderTools {
     top: -1.5em;
     left: 1em;
 }
+
+.ui-tooltip, .qtip {
+    max-width: 500px;
+    left: 200px;
+    top:-200px;
+    position: relative;
+}
