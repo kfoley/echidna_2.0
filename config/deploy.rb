@@ -1,6 +1,6 @@
 set :application, "echidna2.0"
 set :repository,  "https://github.com/kfoley/echidna_2.0.git"
-set :branch, "origin/group_test"
+set :branch, "group_test"
 
 set :scm, :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
