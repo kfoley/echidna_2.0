@@ -20,18 +20,18 @@ class ApplicationController < ActionController::Base
   protected
   def my_assets
     stylesheet_links << "DataTables-1.7.6/media/css/demo_table_jui.css"
-    stylesheet_links << "DataTables-1.7.6/media/css/demo_page.css"
+    #stylesheet_links << "DataTables-1.7.6/media/css/demo_page.css"
     stylesheet_links << "DataTables-1.7.6/media/css/demo_table.css"
     stylesheet_links << "echidna-wizard"
-    stylesheet_links << "smoothness/jquery-ui-1.8.9.custom.css"
-    stylesheet_links << "jquery.qtip.min.css"
+    #stylesheet_links << "smoothness/jquery-ui-1.8.9.custom.css"
+    stylesheet_links << "jquery.qtip.css"
     stylesheet_links << "echidna"
     javascript_includes << "DataTables-1.7.6/media/js/jquery.dataTables.min.js"
     javascript_includes << "collapsing_divs.js"
     javascript_includes << "catalogDataTables.js"
-    javascript_includes << "tooltip.js"
+    #javascript_includes << "tooltip.js"
     javascript_includes << "jquery-ui-1.8.9.custom.min.js"
-    javascript_includes << "jquery.qtip2/jquery.qtip.min.js"
+    javascript_includes << "jquery.qtip.js"
   end
 
 
