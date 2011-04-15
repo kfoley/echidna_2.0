@@ -19,6 +19,10 @@ module ApplicationHelper
       val
     end
 
+    def render_document_title(document) 
+      document[Blacklight.config[:show][:heading]]
+    end
+
     # karen: adding action for getting the data locations for all documents in the "folder"
     def dmv_export(documents)
       uris = []
