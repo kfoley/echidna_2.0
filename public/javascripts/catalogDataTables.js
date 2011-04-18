@@ -16,7 +16,7 @@ $(document).ready(function() {
      }); 
 
      var i = 0;
-     for (i = 0; i <= oTable.length; i++) {
+     for (i = 0; i < oTable.length; i++) {
     	oTable.dataTableExt.iApiIndex = i;
     	$(oTable.fnGetNodes()).each (function() {
 	    var nTds = $('td', this);
