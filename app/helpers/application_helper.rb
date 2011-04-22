@@ -29,13 +29,25 @@ module ApplicationHelper
       documents.each do |doc|
         locations = doc[:data_location]
         locations.each_with_index do |locs, i|
-          #locs = CGI::escape(locs.chomp) don't need to url encode posts
           uris[i] = Hash.new
           uris[i]["uri"] = locs
         end
       end
       uris.to_json
     end
+
+  def get_documents(documents)
+    #documents = params[:documents]
+    docs = []
+    documents.each do |doc|
+      puts "======================="
+      puts doc.to_json
+      puts "======================="      
+      #group_name = doc[:name]
+      #condition_ids = doc[:condition_id]
+    end
+    documents.to_json
+  end
 
   def render_index_field_value args
     value = args[:value]
