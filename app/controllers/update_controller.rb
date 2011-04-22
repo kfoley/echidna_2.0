@@ -60,6 +60,7 @@ class UpdateController < ApplicationController
         child['mdata'] = cond_attr
         #mdata['children'] << attributes['mdata']
         mdata['children'] << child
+        cond_attr = []
       }
 
 

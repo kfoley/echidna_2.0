@@ -319,7 +319,7 @@ updater.makeMetadataTable = function() {
 	result += '<table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;"><tbody>';
 	result += '<tr><th>Metadata</th><th>Type</th>';
         console.debug("test " + updater.folderConditions[i].group_id);	
-        console.debug("test2 " + updater.folderConditions[i].group_id.children.mdata.id);		
+        console.debug("test2 " + updater.folderConditions[i].children.composite.mdata.id);		
 	for (var x = 0; x < updater.folderCondtions.group_id.children.length; x++) {
 
 	}
