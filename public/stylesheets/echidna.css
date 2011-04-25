@@ -131,3 +131,12 @@ ul.folderTools {
 .ui-tooltip, .qtip {
     min-width: 500px;
 }
+
+.group-title {
+
+}
+
+.update-cond {
+    position: relative;
+    display: inline
+}

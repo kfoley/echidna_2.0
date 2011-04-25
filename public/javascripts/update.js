@@ -296,7 +296,9 @@ updater.makeMetadataRowForEdit = function(rowIndex) {
     result += '<td>' + updater.makeMetadataSelectBox(rowIndex) + '</td>';
     result += '<td><input type="radio" name="obspert_' + rowIndex + '" value="observation" checked>observation<br>';
     result += '<input type="radio" name="obspert_' + rowIndex + '" value="perturbation">perturbation</td>';
-    for (var colIndex = 0; colIndex <  updater.conditionsAndGroups.length; colIndex++) {
+    //for (var colIndex = 0; colIndex <  updater.conditionsAndGroups.length; colIndex++) {
+    //for (var colIndex = 0; colIndex <  updater.folderConditions.length; colIndex++) {
+    for (var colIndex = 0; colIndex <  1; colIndex++) {
         var index = rowIndex + '_' + colIndex;
         result += '<td><input name="metadata_value_' + index + '" class="metadata-value" type="text"> ';
         result += updater.makeUnitsSelectBox(index) + '</td>';
@@ -306,29 +308,55 @@ updater.makeMetadataRowForEdit = function(rowIndex) {
 };
 
 updater.makeMetadataTable = function() {
-    //var result = '<table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;"><tbody>';
-    result += '<tr><th>Metadata</th><th>Type</th>';
-    //for (var i = 0; i <  updater.conditionsAndGroups.length; i++) {
-    //    result += '<th>' + updater.conditionsAndGroups[i].condition + '</th>';
-    //}
+
+//        console.debug("folder length " + updater.folderConditions.length);
+//        console.debug("group_id 0 " + updater.folderConditions[0].group_id);
+//        console.debug("group_id 1 " + updater.folderConditions[1].group_id);
+//        console.debug("group_id 2 " + updater.folderConditions[2].group_id);
+//        console.debug("group_id 0 child len " + updater.folderConditions[0].children.length);
+//        console.debug("group_id 1 child len " + updater.folderConditions[1].children.length);
+//        console.debug("group_id 2 child len " + updater.folderConditions[2].children.length);
+//        console.debug("group_id 2 child 0 mdata len " + updater.folderConditions[2].children[0].composite.mdata.length);
+//        console.debug("group_id 2 child 0 mdata 0 id " + updater.folderConditions[2].children[0].composite.mdata[0].id);
+//        console.debug("group_id 2 child 0 mdata 0 key " + updater.folderConditions[2].children[0].composite.mdata[0].key);
+//        console.debug("group_id 2 child 0 mdata 0 val " + updater.folderConditions[2].children[0].composite.mdata[0].value);
+//        console.debug("group_id 2 child 0 mdata 0 comp_id " + updater.folderConditions[2].children[0].composite.mdata[0].composite_id);
+//        console.debug("test " + updater.folderConditions[i].group_id);	
+//        console.debug("test2 " + updater.folderConditions[i].children[i].composite.mdata[2].id);
+
     var result = '';
     for (var i = 0; i <  updater.folderConditions.length; i++) {
-        result += '<div=\"group-title\">';
+        result += '<div class=\"group-title\">';
 	result += updater.folderConditions[i].group_id;
 	result += '</div>';
 	result += '<table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;"><tbody>';
-	result += '<tr><th>Metadata</th><th>Type</th>';
-        console.debug("test " + updater.folderConditions[i].group_id);	
-        console.debug("test2 " + updater.folderConditions[i].children.composite.mdata.id);		
-	for (var x = 0; x < updater.folderCondtions.group_id.children.length; x++) {
+	result += '<tr><th>Metadata</th><th>Type</th></tr>';
+	result += '<tr>';
+	for (var x = 0; x < updater.folderConditions[i].children.length; x++) {
+	    result += '<td>';
+	    result += '<table id="some-table"><tbody>';
+	    result += '<tr><td>';
+	    for (var y = 0; y < updater.folderConditions[i].children[x].composite.mdata.length; y++) {
+	    	result += '<tr>';
+		result += '<td>' + updater.folderConditions[i].children[x].composite.mdata[y].id + '</td>';
+		result += '<td>' + updater.folderConditions[i].children[x].composite.mdata[y].key + '</td>';
+		result += '<td>' + updater.folderConditions[i].children[x].composite.mdata[y].value + '</td>';
+	    	result += '</tr>';
+	    }
 
+    	    result += updater.makeMetadataRowForEdit(0);
+	    //console.debug("</td>");
+	    result += '</tr></td>';
+	    result += '</tbody></table>';
+	    result += '</td>';
 	}
+	result += '</tr>';
 
-        result += '<th>' + updater.folderConditions[i].group_id + '</th>';
+    	result += '</tbody></table>';
+        //result += '<th>' + updater.folderConditions[i].group_id + '</th>';
     }
-    result += '</tr>';
-    result += updater.makeMetadataRowForEdit(0);
-    result += '</tbody></table>';
+    //result += '</tr>';
+
     return result;
 };
 
@@ -587,7 +615,7 @@ $(document).ready(function() {
 	success: function(result) {
 	    console.debug('ajax result ' + result);
 	    updater.folderConditions = result;
-	    $(updater.makeMetadataTable()).relaceAll('#metadata-table');
+	    $(updater.makeMetadataTable()).replaceAll('#metadata-table');
 	},
 	error: function() {
 	    updater.displayErrorBox(['Server down or faulty folder contents information']);
