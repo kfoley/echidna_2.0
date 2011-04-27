@@ -133,10 +133,29 @@ ul.folderTools {
 }
 
 .group-title {
-
+    background-color: rgb(226, 223, 242);
 }
 
-.update-cond {
-    position: relative;
-    display: inline
+#update-metadata-table {
+    margin-bottom: 15px;
+}
+
+.cond-name {
+    width: 30px;
+}
+
+.del-button {
+    padding-right: 20px;
+}
+
+.categ {
+    width: 30px;
+}
+
+.term {
+    width: 40px;
+}
+
+table#update-meta-values {
+    width: 100%;
 }

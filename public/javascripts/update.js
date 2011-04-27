@@ -275,15 +275,19 @@ updater.addMetadataRow = function() {
 updater.makeSelectBoxFromStringArray = function(index, basename, array, defaultValue) {
     var result = '<select id="' + basename + index +'" name="' + basename + index +'">';
     if (defaultValue != null)  result += '<option value="">' + defaultValue + '</option>';
+
     for (var i = 0; i < array.length; i++) {
+        if (array[i] == defaultValue) {
+	    array[i].selected = true;
+	}
         result += '<option>' + array[i] + '</option>';
     }
     result += '</select>';
     return result;
 };
 
-updater.makeMetadataSelectBox = function(index) {
-    return updater.makeSelectBoxFromStringArray(index, 'metadata_type_', updater.metadataTypes, null);
+updater.makeMetadataSelectBox = function(index, myDefault) {
+    return updater.makeSelectBoxFromStringArray(index, 'metadata_type_', updater.metadataTypes, myDefault);
 };
 
 updater.makeUnitsSelectBox = function(index) {
@@ -309,53 +313,42 @@ updater.makeMetadataRowForEdit = function(rowIndex) {
 
 updater.makeMetadataTable = function() {
 
-//        console.debug("folder length " + updater.folderConditions.length);
-//        console.debug("group_id 0 " + updater.folderConditions[0].group_id);
-//        console.debug("group_id 1 " + updater.folderConditions[1].group_id);
-//        console.debug("group_id 2 " + updater.folderConditions[2].group_id);
-//        console.debug("group_id 0 child len " + updater.folderConditions[0].children.length);
-//        console.debug("group_id 1 child len " + updater.folderConditions[1].children.length);
-//        console.debug("group_id 2 child len " + updater.folderConditions[2].children.length);
-//        console.debug("group_id 2 child 0 mdata len " + updater.folderConditions[2].children[0].composite.mdata.length);
-//        console.debug("group_id 2 child 0 mdata 0 id " + updater.folderConditions[2].children[0].composite.mdata[0].id);
-//        console.debug("group_id 2 child 0 mdata 0 key " + updater.folderConditions[2].children[0].composite.mdata[0].key);
-//        console.debug("group_id 2 child 0 mdata 0 val " + updater.folderConditions[2].children[0].composite.mdata[0].value);
-//        console.debug("group_id 2 child 0 mdata 0 comp_id " + updater.folderConditions[2].children[0].composite.mdata[0].composite_id);
-//        console.debug("test " + updater.folderConditions[i].group_id);	
-//        console.debug("test2 " + updater.folderConditions[i].children[i].composite.mdata[2].id);
-
     var result = '';
     for (var i = 0; i <  updater.folderConditions.length; i++) {
-        result += '<div class=\"group-title\">';
-	result += updater.folderConditions[i].group_id;
+        result += '<div class=\"group-title\">Group Name <br />';
+	result += updater.folderConditions[i].group_id + ': ' + updater.folderConditions[i].g_name;
 	result += '</div>';
-	result += '<table id="metadata-table" style="border: 1px solid black; margin-bottom: 1px;"><tbody>';
-	result += '<tr><th>Metadata</th><th>Type</th></tr>';
+	result += '<table id="update-metadata-table" style="border: 1px solid black;"><tbody>';
 	result += '<tr>';
 	for (var x = 0; x < updater.folderConditions[i].children.length; x++) {
+	    //console.debug('species = ' + updater.folderConditions[i].children[x].composite.species);
+	    updater.species = updater.folderConditions[i].children[x].composite.species;
+	    updater.loadMetadataTypes();
 	    result += '<td>';
-	    result += '<table id="some-table"><tbody>';
+	    result += '<table id="update-meta-values"><tbody>';
+	    result += '<tr>' + updater.folderConditions[i].children[x].composite.name + '</tr>';
+	    result += '<tr><th width="50%">Metadata Category</th><th width="50%">Metadata</th><th width="0%"></th></tr>';
 	    result += '<tr><td>';
 	    for (var y = 0; y < updater.folderConditions[i].children[x].composite.mdata.length; y++) {
 	    	result += '<tr>';
-		result += '<td>' + updater.folderConditions[i].children[x].composite.mdata[y].id + '</td>';
-		result += '<td>' + updater.folderConditions[i].children[x].composite.mdata[y].key + '</td>';
-		result += '<td>' + updater.folderConditions[i].children[x].composite.mdata[y].value + '</td>';
+		result += '<td><a href="#" class="del-button" id="' + updater.folderConditions[i].children[x].composite.mdata[y].id + '" class="delete"><img src="images/delete_icon.png" alt="delete"></a><input id="cp_id" value="' + updater.folderConditions[i].children[x].composite.mdata[y].id + '" type="hidden">';
+		//result += updater.folderConditions[i].children[x].composite.mdata[y].key + '</td>';
+		index = updater.folderConditions[i].children[x].composite.mdata[y].id;
+		myDefault = updater.folderConditions[i].children[x].composite.mdata[y].key;
+		result += updater.makeMetadataSelectBox(index,myDefault);
+		result += '</td>';
+		result += '<td><input id="prop_val" value="' + updater.folderConditions[i].children[x].composite.mdata[y].value + '" type="text"></td><td></td>';
 	    	result += '</tr>';
 	    }
 
     	    result += updater.makeMetadataRowForEdit(0);
-	    //console.debug("</td>");
 	    result += '</tr></td>';
 	    result += '</tbody></table>';
 	    result += '</td>';
 	}
 	result += '</tr>';
-
     	result += '</tbody></table>';
-        //result += '<th>' + updater.folderConditions[i].group_id + '</th>';
     }
-    //result += '</tr>';
 
     return result;
 };
@@ -369,15 +362,19 @@ updater.loadUnits = function() {
         }
     });
 };
+
 updater.loadMetadataTypes = function() {
-    species = $('#import_species').val();
+    //species = $('#import_species').val();
+    console.debug('species = ' + updater.species);
     $.ajax({
-        url: 'vocabulary/metadata_types?species=' + species,
+        url: 'vocabulary/metadata_types?species=' + updater.species,
         dataType: 'json',
         success: function(result) {
             updater.metadataTypes = result;
         }
     });
+
+    console.debug('dropdown menu = ' + updater.metadataTypes);
 };
 
 updater.createAndAddMetadata = function() { //metadataName) {

@@ -17,17 +17,24 @@ class UpdateController < ApplicationController
 
     contents.each { |g_id|
       mdata = {}
-      puts g_id
+
+      g_name = Composite.find_by_sql ["SELECT name FROM composites WHERE id=?", g_id]
+      g_name.collect { |name|
+        group_name = name.name
+        mdata['g_name'] = group_name
+      }
 
       mdata['group_id'] = g_id
       mdata['children'] = []
 
-      child_ids = Composite.find_by_sql ["SELECT id FROM composites WHERE id IN (SELECT child_id FROM groupings WHERE parent_id=?)", g_id]
+      child_ids = Composite.find_by_sql ["SELECT id, name FROM composites WHERE id IN (SELECT child_id FROM groupings WHERE parent_id=?)", g_id]
 
       child = {}
       cond_attr = []
       child_ids.collect { |child|
         child.id
+        child.name
+
         c_id = child.id.to_s
         puts child.id
 
@@ -37,6 +44,9 @@ class UpdateController < ApplicationController
 
         metadata.collect { | comp |
           puts comp.attributes
+          if comp.key == 'species'
+            child['species'] = comp.value
+          end
           cond_attr << comp.attributes 
         }
 
