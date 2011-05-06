@@ -159,3 +159,11 @@ ul.folderTools {
 table#update-meta-values {
     width: 100%;
 }
+
+td {
+    text-align: center;
+}
+
+.dataTables_info {
+    text-align: left;
+}

@@ -14,47 +14,19 @@ var updater = {
     // an array of groups and conditions collected in the folder
     folderConditions: [],
 
-    // holds the current global term
-    // holds the current global type
-    globalTerm: '',
-    globalType: '',
-    techTerm: '',
-    techDescr: '',
+    // holds the current species
+    species: '',
     metadataTerm: '',
     metadataType: '',
-    species: '',
 
-    // holds the currently selected condition names contained in the
-    // group assign step. It is cleared after groups were assigned
-    selectedConditions: [],
-    
     // a row in metadata holds entries of
     // { 'key': <somekey>, 'type': <observation|perturbation>, <condition 1>: [<value>, <unit>], ... }
     metadata: [],
 
     // loaded at page load time, we generate select boxes out of them
     metadataTypes: [],
-    units: [],
+    units: []
 
-    // contains all the project ids from sbeams pipeline directory
-    projectIds: [],
-
-    // contains all the timestamp folders from sbeams pipeline/project_id directory
-    timestamps: [],
-
-    // contains all the project ids from the tiling directory on bragi
-    tilingProjectIds: [],
-
-    checkedValue: 'sbeams'
-
-};
-
-updater.findConditionAndGroups = function(conditionName) {
-    for (var i = 0; i < updater.conditionsAndGroups.length; i++) {
-        var condGroup = updater.conditionsAndGroups[i];
-        if (condGroup.condition == conditionName) return condGroup;
-    }
-    return null;
 };
 
 // array filter method, predicate is a function that takes (elem, index)
@@ -253,9 +225,9 @@ updater.saveMetadataTerms = function(metadataTerm, metadataType) {
 };
 
 updater.reloadMetadataTermsSelectBox = function() {
-    species = $('#import_species').val();
+    //species = $('#import_species').val();
     $.ajax({
-	url: 'vocabulary/metadata_types?species=' + species,
+	url: 'vocabulary/metadata_types?species=' + updater.species,
 	success: function(result) {
 	    updater.metadataTypes = result;
 	    updater.createAndAddMetadata();
@@ -312,7 +284,6 @@ updater.makeMetadataRowForEdit = function(rowIndex) {
 };
 
 updater.makeMetadataTable = function() {
-
     var result = '';
     for (var i = 0; i <  updater.folderConditions.length; i++) {
         result += '<div class=\"group-title\">Group Name <br />';
@@ -321,9 +292,9 @@ updater.makeMetadataTable = function() {
 	result += '<table id="update-metadata-table" style="border: 1px solid black;"><tbody>';
 	result += '<tr>';
 	for (var x = 0; x < updater.folderConditions[i].children.length; x++) {
-	    //console.debug('species = ' + updater.folderConditions[i].children[x].composite.species);
-	    updater.species = updater.folderConditions[i].children[x].composite.species;
+	    species = updater.folderConditions[i].children[x].composite.species;
 	    updater.loadMetadataTypes();
+	    //console.debug('inside make metadata table');
 	    result += '<td>';
 	    result += '<table id="update-meta-values"><tbody>';
 	    result += '<tr>' + updater.folderConditions[i].children[x].composite.name + '</tr>';
@@ -331,13 +302,18 @@ updater.makeMetadataTable = function() {
 	    result += '<tr><td>';
 	    for (var y = 0; y < updater.folderConditions[i].children[x].composite.mdata.length; y++) {
 	    	result += '<tr>';
-		result += '<td><a href="#" class="del-button" id="' + updater.folderConditions[i].children[x].composite.mdata[y].id + '" class="delete"><img src="images/delete_icon.png" alt="delete"></a><input id="cp_id" value="' + updater.folderConditions[i].children[x].composite.mdata[y].id + '" type="hidden">';
 		//result += updater.folderConditions[i].children[x].composite.mdata[y].key + '</td>';
 		index = updater.folderConditions[i].children[x].composite.mdata[y].id;
 		myDefault = updater.folderConditions[i].children[x].composite.mdata[y].key;
-		result += updater.makeMetadataSelectBox(index,myDefault);
-		result += '</td>';
-		result += '<td><input id="prop_val" value="' + updater.folderConditions[i].children[x].composite.mdata[y].value + '" type="text"></td><td></td>';
+		if (myDefault == 'species') {
+		    result += '<td><input id="prop_key_0" type="text" disabled="disabled" value="' + updater.folderConditions[i].children[x].composite.mdata[y].key + '" /></td>';
+		    result += '<td><input id="prop_val_0" value="' + updater.folderConditions[i].children[x].composite.mdata[y].value + '" type="text" disabled="disabled"></td><td></td>';
+		} else {
+		    result += '<td><a href="#" class="del-button" id="' + updater.folderConditions[i].children[x].composite.mdata[y].id + '" class="delete"><img src="images/delete_icon.png" alt="delete"></a><input id="cp_id" value="' + updater.folderConditions[i].children[x].composite.mdata[y].id + '" type="hidden">';
+		    result += updater.makeMetadataSelectBox(index,myDefault);
+		    result += '</td>';
+		    result += '<td><input id="prop_val_' + index + '" value="' + updater.folderConditions[i].children[x].composite.mdata[y].value + '" type="text"></td><td></td>';
+		}
 	    	result += '</tr>';
 	    }
 
@@ -353,6 +329,25 @@ updater.makeMetadataTable = function() {
     return result;
 };
 
+updater.updateMetadataSelectBoxes = function() {
+    for (var i = 0; i <  updater.folderConditions.length; i++) {
+	for (var x = 0; x < updater.folderConditions[i].children.length; x++) {
+	    species = updater.folderConditions[i].children[x].composite.species;
+	    updater.loadMetadataTypes();
+	    for (var y = 0; y < updater.folderConditions[i].children[x].composite.mdata.length; y++) {
+		index = updater.folderConditions[i].children[x].composite.mdata[y].id;
+		myDefault = updater.folderConditions[i].children[x].composite.mdata[y].key;	        
+		selbox = updater.makeSelectBoxFromStringArray(index, 'metadata_type_', updater.metadataTypes, myDefault);
+		$(selbox).replaceAll('#metadata_type_' + index);
+	    }
+	}
+    }    
+};
+
+updater.updateMetadataTable = function() {
+    $(updater.makeMetadataTable()).replaceAll('#update-metadata-table');
+};
+
 updater.loadUnits = function() {
     $.ajax({
         url: 'vocabulary/units',
@@ -364,17 +359,15 @@ updater.loadUnits = function() {
 };
 
 updater.loadMetadataTypes = function() {
-    //species = $('#import_species').val();
-    console.debug('species = ' + updater.species);
+	    //console.debug('loadmetadata SUCCESS' + result);
     $.ajax({
-        url: 'vocabulary/metadata_types?species=' + updater.species,
+        url: 'vocabulary/metadata_types?species=' + species,
         dataType: 'json',
         success: function(result) {
+
             updater.metadataTypes = result;
         }
     });
-
-    console.debug('dropdown menu = ' + updater.metadataTypes);
 };
 
 updater.createAndAddMetadata = function() { //metadataName) {
@@ -510,65 +503,6 @@ updater.submitData = function() {
 // ****************************
 // **** Application wiring
 // ************************
-function addStep1EventHandlers() {
-    $('#import_species').click(function() {
-    	species = $('#import_species').val();
-    });
-
-    $('#import_vocab_type').click(function() {
-	if ($('#import_vocab_type').val() == 'technology') {
-	    console.debug('clicked = ' + $('#import_vocab_type').val());
-	} else {
-	    console.debug('you did not choose technology');
-	}
-
-    });
-
-    $('#create-global-term').click(function() {
-        $('#new-global-dialog').dialog('open');
-    });
-
-    // setup dialog
-    $('#new-global-dialog').dialog({title: 'Create Global Term',
-                                   buttons: { 'Ok': function() {
-                                       updater.saveGlobalTerms(
-					   $('#new-global-name').val(),
-					   $('#import_vocab_type').val(),
-					   $('#import_tech_desc').val(),
-					   $('#new-global-techD').val());
-                                       $(this).dialog('close');
-                                   },
-                                              'Cancel': function() { $(this).dialog('close'); } },
-                                   modal: true,
-				   width: '500'
-                                  });
-    $('#new-global-dialog').dialog('close');
-
-}
-
-function addStep2EventHandlers() {
-    $('#checkall').click(function() {
-        $('td :checkbox').attr('checked', $('#checkall').attr('checked'));
-    });
-    $('#add-selected-conditions').click(updater.addCheckedConditions);
-    $('#create-group').click(function() {
-        $('#new-group-dialog').dialog('open');
-    });
-    $('#apply-grouping').click(updater.applyGrouping);
-
-    // setup dialog
-    $('#new-group-dialog').dialog({title: 'Create Group',
-                                   buttons: { 'Ok': function() {
-                                       updater.createAndAddGroup($('#new-group-name').val());
-                                       $(this).dialog('close');
-                                   },
-                                              'Cancel': function() { $(this).dialog('close'); } },
-                                   modal: true,
-				   width: '500'
-                                  });
-    $('#new-group-dialog').dialog('close');
-}
-
 function addStep3EventHandlers() {
     $('#add-metadata-term').click(function() {
         $('#new-metadata-dialog').dialog('open');
@@ -600,25 +534,38 @@ updater.displayErrorBox = function(messages) {
     $('#step1-errorbox').show();
 };
 
-// Application entry point
-$(document).ready(function() {
-    $('#update_success_report').hide();
-    $('#update_error_report').hide();
+updater.getFolderData = function() {
 
     // fetch and load data
     $.ajax({
         url: 'update/folder_contents',
 	dataType: 'json',
 	success: function(result) {
-	    console.debug('ajax result ' + result);
 	    updater.folderConditions = result;
 	    $(updater.makeMetadataTable()).replaceAll('#metadata-table');
+	    updater.updateMetadataSelectBoxes();
 	},
 	error: function() {
 	    updater.displayErrorBox(['Server down or faulty folder contents information']);
 	}
     
     });
+
+};
+
+updater.testFunction = function() {
+    console.debug('test = ' + updater.folderConditions);
+};
+
+// Application entry point
+$(document).ready(function() {
+    $('#update_success_report').hide();
+    $('#update_error_report').hide();
+    
+    updater.getFolderData();
+    updater.testFunction();
+    //$(updater.makeMetadataTable()).replaceAll('#metadata-table');
+
     //updater.createProjectIdSelectBox();
     //updater.createTilingProjectIdSelectBox();
 
@@ -629,11 +576,14 @@ $(document).ready(function() {
     $('#submit-data').click(updater.submitData);
 
 
+
     // data load
     //updater.reloadGlobalTermsSelectBox();
     //updater.reloadProjectIdsSelectBox();
     //updater.reloadTilingProjectIdsSelectBox();
     //updater.reloadGroupSelectBox();
+    //updater.reloadMetadataTermsSelectBox();
+    updater.loadMetadataTypes();
     updater.loadUnits();
 
 });

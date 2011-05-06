@@ -100,7 +100,11 @@ module ApplicationHelper
     html_line = ''
     html_ret = ''
     group_props.each do |prop|
-      html_line = "<th>" << prop << "</th>" 
+      if prop == "tag"
+        html_line = ""
+      else
+        html_line = "<th>" << prop << "</th>" 
+      end
       html_ret << html_line
     end
     html_ret = "<th>Condition Id</th>" << html_ret
@@ -141,10 +145,12 @@ module ApplicationHelper
       group_props.each_with_index do |gp, index_j|
         v = h_conds[gp]
         if !v.nil? 
-          aaData[index_i][index_j + 1] = v
+          #aaData[index_i][index_j + 1] = v
           if gp == "tag"
-            html_line << "<td class=\"tag-data\">" << v.join(', ') << "</td>"
+            #html_line << "<td class=\"tag-data\">" << v.join(', ') << "</td>"
+            html_line << ""
           else
+            aaData[index_i][index_j + 1] = v
             html_line << "<td>" << v.join(', ') << "</td>"
           end
         else
